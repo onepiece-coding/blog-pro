@@ -1,0 +1,34 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { axiosErrorHandler } from "@/lib/utils";
+
+import api from "@/services/api-service";
+
+type TResetPasswordInfo = {
+  authInfo: {
+    userId: string;
+    token: string;
+  };
+  formData: {
+    password: string;
+  };
+};
+
+const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (resetPasswordInfo: TResetPasswordInfo, thunk) => {
+    const { rejectWithValue } = thunk;
+    try {
+      await api.post(
+        `/password/reset-password/${resetPasswordInfo.authInfo.userId}/${resetPasswordInfo.authInfo.token}`,
+        { password: resetPasswordInfo.formData.password },
+      );
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Reset Password:", error);
+      }
+      return rejectWithValue(axiosErrorHandler(error));
+    }
+  },
+);
+
+export default resetPassword;

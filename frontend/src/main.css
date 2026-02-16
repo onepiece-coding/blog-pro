@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Target the entire document and all scrollable elements */
+html,
+body,
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Target Chrome, Safari, and all Webkit browsers */
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.viewport-card {
+  --header-height: 56px;
+  --footer-height: 44px;
+  --block-margin: 2rem;
+
+  max-height: calc(
+    100vh - (var(--header-height) + var(--footer-height) + var(--block-margin))
+  );
+  display: flex;
+  flex-direction: column;
+}
+
+.viewport-card .card-body {
+  /* This tells the body to grow/shrink and handle scrolling */
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0; /* Crucial for Firefox/Chrome to allow shrinking */
+}
+
+.dropdown-menu {
+  width: 100%;
+}
+
+table th,
+table td {
+  white-space: nowrap;
+  vertical-align: middle;
+}

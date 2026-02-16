@@ -1,0 +1,20 @@
+.cardImage {
+  height: 200px;
+}
+
+.clampText {
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+.clampTitle1Line {
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.clampDescription3Lines {
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}

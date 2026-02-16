@@ -1,0 +1,57 @@
+.toast {
+  animation: slideIn 0.4s ease-out forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Class to trigger when toast is about to be removed */
+.toastExiting {
+  animation: fadeOut 0.4s ease-in forwards;
+}
+
+.toast h5 {
+  text-transform: capitalize;
+  font-size: 16px;
+}
+
+.toast p {
+  margin-bottom: 0;
+  font-size: 15px;
+}
+
+.toast button {
+  position: absolute;
+  right: 10px;
+  height: 7px;
+  width: 7px;
+  top: 10px;
+}
+
+.toast span {
+  position: absolute;
+  min-height: 4px;
+  bottom: 0;
+  left: 0;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
