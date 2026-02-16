@@ -137,7 +137,7 @@ const LoginUser = () => {
                       {status === "pending" ? (
                         <>
                           <Spinner
-                            aria-label="Registering account"
+                            aria-label="Logging to your account"
                             animation="border"
                             role="status"
                             size="sm"

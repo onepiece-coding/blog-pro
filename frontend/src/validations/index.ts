@@ -3,11 +3,14 @@ import {
   type TLoginSchema,
   registerSchema,
   type TRegisterSchema,
+} from "./auth-schemas";
+
+import {
   resetPasswordSchema,
   type TResetPasswordSchema,
   sendResetPasswordLinkSchema,
   type TSendResetPasswordLinkSchema,
-} from "./auth-schemas";
+} from "./password-schemas";
 
 import {
   createPostSchema,
