@@ -1,3 +1,7 @@
+/**
+ * @file src/store/password/password-selectors.ts
+ */
+
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 

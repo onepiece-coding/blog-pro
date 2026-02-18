@@ -1,3 +1,7 @@
+/**
+ * @file src/validations/password-schemas.ts
+ */
+
 import z from "zod";
 
 const resetPasswordSchema = z

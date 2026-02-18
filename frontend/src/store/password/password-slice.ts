@@ -1,10 +1,14 @@
+/**
+ * @file src/store/password/password-slice.ts
+ */
+
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { handlePending, handleRejected } from "@/lib/utils";
 import { type TStatus } from "@/lib/types";
 
 import sendResetPasswordLink from "./actions/send-reset-password-link";
 import getResetPasswordLink from "./actions/get-reset-password-link";
 import resetPassword from "./actions/reset-password";
-import { handlePending, handleRejected } from "@/lib/utils";
 
 interface IPasswordState {
   operations: {

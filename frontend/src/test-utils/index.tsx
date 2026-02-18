@@ -8,7 +8,8 @@
  *  STORE FACTORIES
  *  • makeAuthState        — build a partial auth slice state (safe defaults)
  *  • makeToastsState      — build a partial toasts slice state (safe defaults)
- *  • buildStore           — create a real Redux store with both slices
+ *  • makePasswordState    — build a partial password slice state (safe defaults)
+ *  • buildStore           — create a real Redux store with all three slices
  *
  *  RENDER HELPERS
  *  • renderWithProviders  — render inside <Provider> + <MemoryRouter>
@@ -31,8 +32,8 @@
  *     configureStore with preloadedState keeps selectors honest.
  *     A broken selector breaks the test — that's the desired behaviour.
  *
- *  2. Both auth and toasts are registered by default.
- *     Any component in the tree that reads from either slice works without
+ *  2. Auth, toasts, and password are registered by default.
+ *     Any component in the tree that reads from these slices works without
  *     extra configuration. extraReducers handles future slices.
  *
  *  3. renderWithProviders always returns `store`.
@@ -53,6 +54,7 @@ import { configureStore, type Reducer } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 import toastsReducer from "@/store/toasts/toasts-slice";
+import passwordReducer from "@/store/password/password-slice";
 import authReducer from "@/store/auth/auth-slice";
 import type { RootState } from "@/store";
 import type { IToast, IUser } from "@/lib/types";
@@ -63,11 +65,12 @@ import type { IToast, IUser } from "@/lib/types";
 
 /**
  * Partial preloaded state accepted by buildStore.
- * Both auth and toasts are registered by default — extend as needed.
+ * Both auth, toasts, and password are registered by default — extend as needed.
  */
 export interface PreloadedTestState {
   auth?: Partial<RootState["auth"]>;
   toasts?: Partial<RootState["toasts"]>;
+  password?: Partial<RootState["password"]>;
   // Add more slices here as the project grows:
   // posts?: Partial<RootState["posts"]>;
   // users?: Partial<RootState["users"]>;
@@ -144,12 +147,37 @@ export const makeToastsState = (
 });
 
 /**
+ * Build a fully-typed password slice state with safe idle/null defaults.
+ * Pass only the fields you care about — the rest stay at initial state.
+ *
+ * @example
+ * makePasswordState({ operations: { resetPassword: "pending" } })
+ * makePasswordState({ errors: { sendResetPasswordLink: "Email not found" } })
+ */
+export const makePasswordState = (
+  overrides: Partial<RootState["password"]> = {},
+): RootState["password"] => ({
+  operations: {
+    sendResetPasswordLink: "idle",
+    getResetPasswordLink: "idle",
+    resetPassword: "idle",
+  },
+  errors: {
+    sendResetPasswordLink: null,
+    getResetPasswordLink: null,
+    resetPassword: null,
+  },
+  ...overrides,
+});
+
+/**
  * Create a real Redux store pre-loaded with test state.
- * Registers auth and toasts by default — both are ubiquitous in the app.
+ * Registers auth, toasts, and password by default — all are ubiquitous.
  *
  * @example
  * const store = buildStore({ auth: { user: regularUser } });
  * const store = buildStore({ toasts: { records: [mockToast] } });
+ * const store = buildStore({ password: { operations: { resetPassword: "pending" } } });
  */
 export const buildStore = (
   preloadedState: PreloadedTestState = {},
@@ -158,6 +186,7 @@ export const buildStore = (
   const {
     auth: authOverrides = {},
     toasts: toastsOverrides = {},
+    password: passwordOverrides = {},
     ...otherSlices
   } = preloadedState;
 
@@ -165,11 +194,13 @@ export const buildStore = (
     reducer: {
       auth: authReducer,
       toasts: toastsReducer,
+      password: passwordReducer,
       ...extraReducers,
     },
     preloadedState: {
       auth: makeAuthState(authOverrides),
       toasts: makeToastsState(toastsOverrides),
+      password: makePasswordState(passwordOverrides),
       ...Object.fromEntries(
         Object.entries(otherSlices).filter(([key]) => key in extraReducers),
       ),

@@ -1,9 +1,21 @@
+/**
+ * @file src/pages/password/send-reset-password-link/index.tsx
+ */
+
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { addToast } from "@/store/toasts/toasts-slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "@/components/forms";
 import { Heading } from "@/components/common";
-import { useDocumentTitle } from "@/hooks";
+import {
+  selectSendResetPasswordLinkError,
+  selectSendResetPasswordLinkStatus,
+} from "@/store/password/password-selectors";
+import {
+  clearPasswordError,
+  sendResetPasswordLink,
+} from "@/store/password/password-slice";
 import { useEffect } from "react";
 import {
   type TSendResetPasswordLinkSchema,
@@ -19,21 +31,10 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import {
-  selectSendResetPasswordLinkError,
-  selectSendResetPasswordLinkStatus,
-} from "@/store/password/password-selectors";
-import {
-  clearPasswordError,
-  sendResetPasswordLink,
-} from "@/store/password/password-slice";
-import { addToast } from "@/store/toasts/toasts-slice";
 
 const FORM_ID = "send-reset-password-link-form";
 
 const SendResetPasswordLink = () => {
-  useDocumentTitle("Blog Pro - Send The Password Reset Link");
-
   const status = useAppSelector(selectSendResetPasswordLinkStatus);
   const error = useAppSelector(selectSendResetPasswordLinkError);
 
@@ -75,75 +76,79 @@ const SendResetPasswordLink = () => {
   }, [dispatch]);
 
   return (
-    <section
-      aria-labelledby="send-reset-password-link-heading"
-      className="my-3"
-      role="region"
-    >
-      <Container>
-        <Row>
-          <Col lg={{ span: "8", offset: "2" }}>
-            <Card className="viewport-card">
-              <Card.Header>
-                <Heading
-                  id="send-reset-password-link-heading"
-                  title="Send the password reset link"
-                />
-              </Card.Header>
+    <>
+      <title>Blog Pro - Send The Password Reset Link</title>
 
-              <Card.Body>
-                {error && (
-                  <Alert
-                    className="text-center"
-                    aria-live="assertive"
-                    variant="danger"
-                    role="alert"
-                  >
-                    {error}
-                  </Alert>
-                )}
-
-                <Form
-                  onSubmit={sendResetPasswordLinkForm.handleSubmit(onSubmit)}
-                  aria-labelledby="send-reset-password-link-heading"
-                  id={FORM_ID}
-                  noValidate
-                >
-                  <FormField
-                    placeholder="your.email@example.com"
-                    control={sendResetPasswordLinkForm.control}
-                    formId={FORM_ID}
-                    label="Email"
-                    name="email"
-                    type="email"
+      <section
+        aria-labelledby="send-reset-password-link-heading"
+        className="my-3"
+        role="region"
+      >
+        <Container>
+          <Row>
+            <Col lg={{ span: "8", offset: "2" }}>
+              <Card className="viewport-card">
+                <Card.Header>
+                  <Heading
+                    id="send-reset-password-link-heading"
+                    title="Send the password reset link"
                   />
+                </Card.Header>
 
-                  <Button
-                    aria-busy={status === "pending"}
-                    disabled={status === "pending"}
-                    type="submit"
+                <Card.Body>
+                  {error && (
+                    <Alert
+                      className="text-center"
+                      aria-live="assertive"
+                      variant="danger"
+                      role="alert"
+                    >
+                      {error}
+                    </Alert>
+                  )}
+
+                  <Form
+                    onSubmit={sendResetPasswordLinkForm.handleSubmit(onSubmit)}
+                    aria-labelledby="send-reset-password-link-heading"
+                    id={FORM_ID}
+                    noValidate
                   >
-                    {status === "pending" ? (
-                      <>
-                        <Spinner
-                          aria-label="Sending the password reset link"
-                          animation="border"
-                          role="status"
-                          size="sm"
-                        />{" "}
-                        Sending the password reset link...
-                      </>
-                    ) : (
-                      "Send the password reset link"
-                    )}
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+                    <FormField
+                      placeholder="your.email@example.com"
+                      control={sendResetPasswordLinkForm.control}
+                      formId={FORM_ID}
+                      label="Email"
+                      name="email"
+                      type="email"
+                    />
+
+                    <Button
+                      aria-busy={status === "pending"}
+                      disabled={status === "pending"}
+                      type="submit"
+                    >
+                      {status === "pending" ? (
+                        <>
+                          <Spinner
+                            aria-label="Sending the password reset link"
+                            animation="border"
+                            role="status"
+                            size="sm"
+                          />{" "}
+                          Sending the password reset link...
+                        </>
+                      ) : (
+                        "Send the password reset link"
+                      )}
+                    </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </>
   );
 };
 

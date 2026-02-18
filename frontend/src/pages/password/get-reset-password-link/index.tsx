@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/password/get-reset-password-link/index.tsx
+ */
+
 import { Loading, LottieHandler } from "@/components/feedback";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,7 +11,6 @@ import {
   selectGetResetPasswordLinkStatus,
 } from "@/store/password/password-selectors";
 import { Container } from "react-bootstrap";
-import { useDocumentTitle } from "@/hooks";
 import {
   clearPasswordError,
   getResetPasswordLink,
@@ -15,8 +18,6 @@ import {
 import { useEffect } from "react";
 
 const GetResetPasswordLink = () => {
-  useDocumentTitle("Blog Pro - Get The Password Reset Link");
-
   const { userId, token } = useParams();
 
   const status = useAppSelector(selectGetResetPasswordLinkStatus);
@@ -48,27 +49,31 @@ const GetResetPasswordLink = () => {
   }, [userId, token, dispatch, navigate]);
 
   return (
-    <section
-      className={"d-flex align-items-center h-100"}
-      aria-labelledby="get-reset-password-link-heading"
-      role="region"
-    >
-      <Container>
-        <Heading
-          id="get-reset-password-link-heading"
-          title="Get the password reset link"
-          srOnly={true}
-        />
-        <Loading status={status} error={error}>
-          <LottieHandler
-            message="Used url has been verified successfully"
-            className="text-info mt-3 mb-0"
-            type="lottie-success"
-            title="Valid url"
+    <>
+      <title>Blog Pro - Get The Password Reset Link</title>
+
+      <section
+        className={"d-flex align-items-center h-100"}
+        aria-labelledby="get-reset-password-link-heading"
+        role="region"
+      >
+        <Container>
+          <Heading
+            id="get-reset-password-link-heading"
+            title="Get the password reset link"
+            srOnly={true}
           />
-        </Loading>
-      </Container>
-    </section>
+          <Loading status={status} error={error}>
+            <LottieHandler
+              message="Used url has been verified successfully"
+              className="text-info mt-3 mb-0"
+              type="lottie-success"
+              title="Valid url"
+            />
+          </Loading>
+        </Container>
+      </section>
+    </>
   );
 };
 

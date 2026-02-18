@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/password/reset-password/index.tsx
+ */
+
 import { type TResetPasswordSchema, resetPasswordSchema } from "@/validations";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -9,7 +13,6 @@ import {
   selectResetPasswordError,
   selectResetPasswordStatus,
 } from "@/store/password/password-selectors";
-import { useDocumentTitle } from "@/hooks";
 import {
   clearPasswordError,
   resetPassword,
@@ -30,8 +33,6 @@ import { addToast } from "@/store/toasts/toasts-slice";
 const FORM_ID = "reset-password-form";
 
 const ResetPassword = () => {
-  useDocumentTitle("Blog Pro - Reset Password");
-
   const { userId, token } = useParams();
 
   const status = useAppSelector(selectResetPasswordStatus);
@@ -85,81 +86,85 @@ const ResetPassword = () => {
   }, [dispatch]);
 
   return (
-    <section
-      aria-labelledby="reset-password-heading"
-      className="my-3"
-      role="region"
-    >
-      <Container>
-        <Row>
-          <Col lg={{ span: "8", offset: "2" }}>
-            <Card className="viewport-card">
-              <Card.Header>
-                <Heading id="reset-password-heading" title="Reset Password" />
-              </Card.Header>
+    <>
+      <title>Blog Pro - Reset Password</title>
 
-              <Card.Body>
-                {error && (
-                  <Alert
-                    className="text-center"
-                    aria-live="assertive"
-                    variant="danger"
-                    role="alert"
+      <section
+        aria-labelledby="reset-password-heading"
+        className="my-3"
+        role="region"
+      >
+        <Container>
+          <Row>
+            <Col lg={{ span: "8", offset: "2" }}>
+              <Card className="viewport-card">
+                <Card.Header>
+                  <Heading id="reset-password-heading" title="Reset Password" />
+                </Card.Header>
+
+                <Card.Body>
+                  {error && (
+                    <Alert
+                      className="text-center"
+                      aria-live="assertive"
+                      variant="danger"
+                      role="alert"
+                    >
+                      {error}
+                    </Alert>
+                  )}
+
+                  <Form
+                    onSubmit={resetPasswordForm.handleSubmit(onSubmit)}
+                    aria-labelledby="reset-password-heading"
+                    id={FORM_ID}
+                    noValidate
                   >
-                    {error}
-                  </Alert>
-                )}
+                    <FormField
+                      placeholder="Minimum 8 characters"
+                      control={resetPasswordForm.control}
+                      formId={FORM_ID}
+                      label="Password"
+                      name="password"
+                      type="password"
+                    />
 
-                <Form
-                  onSubmit={resetPasswordForm.handleSubmit(onSubmit)}
-                  aria-labelledby="reset-password-heading"
-                  id={FORM_ID}
-                  noValidate
-                >
-                  <FormField
-                    placeholder="Minimum 8 characters"
-                    control={resetPasswordForm.control}
-                    formId={FORM_ID}
-                    label="Password"
-                    name="password"
-                    type="password"
-                  />
+                    <FormField
+                      placeholder="Re-enter your password"
+                      control={resetPasswordForm.control}
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      formId={FORM_ID}
+                      type="password"
+                    />
 
-                  <FormField
-                    placeholder="Re-enter your password"
-                    control={resetPasswordForm.control}
-                    label="Confirm Password"
-                    name="confirmPassword"
-                    formId={FORM_ID}
-                    type="password"
-                  />
-
-                  <Button
-                    aria-busy={status === "pending"}
-                    disabled={status === "pending"}
-                    type="submit"
-                  >
-                    {status === "pending" ? (
-                      <>
-                        <Spinner
-                          aria-label="Resetting the password"
-                          animation="border"
-                          role="status"
-                          size="sm"
-                        />{" "}
-                        Resetting the password...
-                      </>
-                    ) : (
-                      "Reset the password"
-                    )}
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+                    <Button
+                      aria-busy={status === "pending"}
+                      disabled={status === "pending"}
+                      type="submit"
+                    >
+                      {status === "pending" ? (
+                        <>
+                          <Spinner
+                            aria-label="Resetting the password"
+                            animation="border"
+                            role="status"
+                            size="sm"
+                          />{" "}
+                          Resetting the password...
+                        </>
+                      ) : (
+                        "Reset the password"
+                      )}
+                    </Button>
+                  </Form>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </>
   );
 };
 
