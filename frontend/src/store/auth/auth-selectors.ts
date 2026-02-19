@@ -1,3 +1,7 @@
+/**
+ * @file src/store/auth/auth-selectors.ts
+ */
+
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 

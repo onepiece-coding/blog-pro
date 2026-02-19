@@ -1,3 +1,7 @@
+/**
+ * @file src/routes/with-suspense/index.tsx
+ */
+
 import { Spinner } from "react-bootstrap";
 import { Suspense } from "react";
 

@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/admin-dashboard/manage-users/index.tsx
+ */
+
 import {
   deleteUserProfile,
   getAllUsers,
@@ -81,94 +85,101 @@ const ManageUsers = () => {
   }, [dispatch, pageNumber, username]);
 
   return (
-    <Loading status={getAllUsersStatus} error={getAllUsersError}>
-      <div className="d-flex flex-column row-gap-3">
-        {deleteUserProfileError && (
-          <Alert
-            className="text-center mb-0"
-            aria-live="assertive"
-            variant="danger"
-            role="alert"
-          >
-            {deleteUserProfileError}
-          </Alert>
-        )}
+    <>
+      <title>Admin Dashboard | Manage Users</title>
 
-        <Search handleSearchChange={handleUsernameChange} label={"Username"} />
+      <Loading status={getAllUsersStatus} error={getAllUsersError}>
+        <div className="d-flex flex-column row-gap-3">
+          {deleteUserProfileError && (
+            <Alert
+              className="text-center mb-0"
+              aria-live="assertive"
+              variant="danger"
+              role="alert"
+            >
+              {deleteUserProfileError}
+            </Alert>
+          )}
 
-        <div className="table-responsive">
-          <Table striped bordered hover className="mb-0">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Bio</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getAllUsersRecords.length === 0 ? (
-                <tr className="text-center">
-                  <td colSpan={5} className="text-info">
-                    There is no users to view!
-                  </td>
+          <Search
+            handleSearchChange={handleUsernameChange}
+            label={"Username"}
+          />
+
+          <div className="table-responsive">
+            <Table striped bordered hover className="mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Bio</th>
+                  <th>Actions</th>
                 </tr>
-              ) : (
-                getAllUsersRecords.map((user) => (
-                  <tr key={user._id}>
-                    <td>
-                      <img
-                        src={user.profilePhoto.url}
-                        alt={user.username}
-                        width={40}
-                        height={40}
-                        className="rounded-circle"
-                      />
-                    </td>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>{user.bio || "-"}</td>
-                    <td>
-                      <div className="d-flex gap-2">
-                        <Link to={`/users/${user._id}/user-profile`}>
-                          <Button variant="info" size="sm">
-                            <EyeIcon width={16} height={16} />
-                          </Button>
-                        </Link>
-                        <Button
-                          disabled={deleteUserProfileStatus === user._id}
-                          onClick={() => deleteUserHandler(user._id)}
-                          variant="danger"
-                          size="sm"
-                        >
-                          {deleteUserProfileStatus === user._id ? (
-                            <Spinner
-                              aria-label="Delete user profile"
-                              animation="border"
-                              role="status"
-                              size="sm"
-                            />
-                          ) : (
-                            <TrashIcon width={16} height={16} />
-                          )}
-                        </Button>
-                      </div>
+              </thead>
+              <tbody>
+                {getAllUsersRecords.length === 0 ? (
+                  <tr className="text-center">
+                    <td colSpan={5} className="text-info">
+                      There is no users to view!
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-        </div>
+                ) : (
+                  getAllUsersRecords.map((user) => (
+                    <tr key={user._id}>
+                      <td>
+                        <img
+                          src={user.profilePhoto.url}
+                          alt={user.username}
+                          width={40}
+                          height={40}
+                          className="rounded-circle"
+                        />
+                      </td>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
+                      <td>{user.bio || "-"}</td>
+                      <td>
+                        <div className="d-flex gap-2">
+                          <Link to={`/users/${user._id}/user-profile`}>
+                            <Button variant="info" size="sm">
+                              <EyeIcon width={16} height={16} />
+                            </Button>
+                          </Link>
+                          <Button
+                            disabled={deleteUserProfileStatus === user._id}
+                            onClick={() => deleteUserHandler(user._id)}
+                            variant="danger"
+                            size="sm"
+                          >
+                            {deleteUserProfileStatus === user._id ? (
+                              <Spinner
+                                aria-label="Delete user profile"
+                                animation="border"
+                                role="status"
+                                size="sm"
+                              />
+                            ) : (
+                              <TrashIcon width={16} height={16} />
+                            )}
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </div>
 
-        <Pagination
-          handlePageChange={handlePageChange}
-          totalPages={getAllUsersTotalPages}
-          pageNumber={pageNumber}
-        />
-      </div>
-    </Loading>
+          <Pagination
+            handlePageChange={handlePageChange}
+            totalPages={getAllUsersTotalPages}
+            pageNumber={pageNumber}
+          />
+        </div>
+      </Loading>
+    </>
   );
 };
 

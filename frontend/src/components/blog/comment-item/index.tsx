@@ -1,3 +1,7 @@
+/**
+ * @file src/components/blog/comment-item/index.tsx
+ */
+
 import { deleteComment } from "@/store/comments/comments-slice";
 import { Button, Card, Spinner } from "react-bootstrap";
 import type { IComment, IUser } from "@/lib/types";

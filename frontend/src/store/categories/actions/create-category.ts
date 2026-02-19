@@ -1,3 +1,7 @@
+/**
+ * @file src/store/categories/actions/create-category.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 

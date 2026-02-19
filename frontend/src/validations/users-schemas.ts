@@ -1,3 +1,7 @@
+/**
+ * @file src/validations/users-schemas.ts
+ */
+
 import z from "zod";
 
 const updateUserProfileSchema = z

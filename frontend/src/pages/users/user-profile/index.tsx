@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/users/user-profile/index.tsx
+ */
+
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -5,7 +9,6 @@ import { logout } from "@/store/auth/auth-slice";
 import { Loading } from "@/components/feedback";
 import { Heading } from "@/components/common";
 import { formatTimeAgo } from "@/lib/utils";
-import { useDocumentTitle } from "@/hooks";
 import { Link } from "react-router-dom";
 import {
   selectGetUserProfileStatus,
@@ -43,8 +46,6 @@ import { addToast } from "@/store/toasts/toasts-slice";
 const { userProfilePhotoContainer, userProfilePhoto, userInfoList } = styles;
 
 const UserProfile = () => {
-  useDocumentTitle("Blog Pro - Get User Profile");
-
   const { userId } = useParams();
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -149,175 +150,185 @@ const UserProfile = () => {
   }, [dispatch, userId]);
 
   return (
-    <section
-      className="my-3"
-      aria-labelledby="user-profile-heading"
-      role="region"
-    >
-      <Container>
-        <Heading id="user-profile-heading" title="User Profile" srOnly={true} />
-        <Loading status={getUserProfileStatus} error={getUserProfileError}>
-          <Row>
-            <Col md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
-              <Card className="viewport-card">
-                <Card.Header>
-                  <div className="d-flex flex-column gap-2 flex-sm-row justify-content-between align-items-center">
-                    <p className="mb-0">
-                      Welcome {getUserProfileUser?.username}
-                    </p>
-                    {isAuthenticated &&
-                      currentUser?._id === getUserProfileUser?._id && (
-                        <Link
-                          to={`/users/${getUserProfileUser?._id}/update-user-profile`}
-                          className="text-decoration-none"
-                          aria-label="Update User Profile"
-                          state={{
-                            username: getUserProfileUser?.username,
-                            bio: getUserProfileUser?.bio,
-                          }}
-                        >
-                          Update Profile
-                        </Link>
-                      )}
-                  </div>
-                </Card.Header>
-                <Card.Body>
-                  {updateProfilePhotoError && (
-                    <Alert
-                      className="text-center"
-                      aria-live="assertive"
-                      variant="danger"
-                      role="alert"
-                    >
-                      {updateProfilePhotoError}
-                    </Alert>
-                  )}
+    <>
+      <title>Blog Pro - Get User Profile</title>
 
-                  {deleteUserProfileError && (
-                    <Alert
-                      className="text-center"
-                      aria-live="assertive"
-                      variant="danger"
-                      role="alert"
-                    >
-                      {deleteUserProfileError}
-                    </Alert>
-                  )}
-
-                  <div className="d-flex flex-column gap-3 flex-sm-row align-items-center text-center text-sm-start">
-                    <div className={userProfilePhotoContainer}>
-                      {isAuthenticated &&
-                        currentUser?._id === getUserProfileUser?._id &&
-                        (!image ? (
-                          <>
-                            <label htmlFor="profile-photo">change</label>
-                            <input
-                              onChange={handleImageChange}
-                              className="d-none"
-                              id="profile-photo"
-                              accept="image/*"
-                              type="file"
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <Button onClick={cancelImageUpload}>Cancel</Button>
-                          </>
-                        ))}
-                      <img
-                        src={preview ?? getUserProfileUser?.profilePhoto.url}
-                        alt={getUserProfileUser?.username}
-                        className={userProfilePhoto}
-                      />
-                    </div>
-                    <ul className={userInfoList}>
-                      <li>Username: {getUserProfileUser?.username}</li>
-                      <li>Email: {getUserProfileUser?.email}</li>
-                      {getUserProfileUser?.bio && (
-                        <li>Bio: {getUserProfileUser.bio}</li>
-                      )}
-                      <li>
-                        Join Us:{" "}
-                        {formatTimeAgo(getUserProfileUser?.createdAt || "")}
-                      </li>
-                    </ul>
-                  </div>
-                </Card.Body>
-                <Card.Footer>
-                  <div className="d-flex gap-2 justify-content-between align-items-center">
-                    <Link
-                      className="text-decoration-none"
-                      aria-label="Get Your Posts"
-                      to="/posts/posts-list"
-                      state={{
-                        username: getUserProfileUser?.username,
-                        userPosts: getUserProfileUser?.posts,
-                      }}
-                    >
-                      User Posts
-                    </Link>
-                    <div className="d-flex column-gap-2">
-                      {isAuthenticated &&
-                        currentUser?._id === getUserProfileUser?._id &&
-                        image && (
-                          <Button
-                            aria-busy={updateProfilePhotoStatus === "pending"}
-                            disabled={updateProfilePhotoStatus === "pending"}
-                            onClick={saveImage}
-                          >
-                            {updateProfilePhotoStatus === "pending" ? (
-                              <>
-                                <Spinner
-                                  aria-label="Update user profile"
-                                  animation="border"
-                                  role="status"
-                                  size="sm"
-                                />{" "}
-                                Saving...
-                              </>
-                            ) : (
-                              "Save"
-                            )}
-                          </Button>
-                        )}
+      <section
+        className="my-3"
+        aria-labelledby="user-profile-heading"
+        role="region"
+      >
+        <Container>
+          <Heading
+            id="user-profile-heading"
+            title="User Profile"
+            srOnly={true}
+          />
+          <Loading status={getUserProfileStatus} error={getUserProfileError}>
+            <Row>
+              <Col md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
+                <Card className="viewport-card">
+                  <Card.Header>
+                    <div className="d-flex flex-column gap-2 flex-sm-row justify-content-between align-items-center">
+                      <p className="mb-0">
+                        Welcome {getUserProfileUser?.username}
+                      </p>
                       {isAuthenticated &&
                         currentUser?._id === getUserProfileUser?._id && (
-                          <Button
-                            aria-busy={
-                              deleteUserProfileStatus ===
-                              getUserProfileUser?._id
-                            }
-                            disabled={
-                              deleteUserProfileStatus ===
-                              getUserProfileUser?._id
-                            }
-                            onClick={deleteProfile}
+                          <Link
+                            to={`/users/${getUserProfileUser?._id}/update-user-profile`}
+                            className="text-decoration-none"
+                            aria-label="Update User Profile"
+                            state={{
+                              username: getUserProfileUser?.username,
+                              bio: getUserProfileUser?.bio,
+                            }}
                           >
-                            {deleteUserProfileStatus ===
-                            getUserProfileUser?._id ? (
-                              <>
-                                <Spinner
-                                  aria-label="Delete user profile"
-                                  animation="border"
-                                  role="status"
-                                  size="sm"
-                                />{" "}
-                                Removing account...
-                              </>
-                            ) : (
-                              "Delete"
-                            )}
-                          </Button>
+                            Update Profile
+                          </Link>
                         )}
                     </div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-          </Row>
-        </Loading>
-      </Container>
-    </section>
+                  </Card.Header>
+                  <Card.Body>
+                    {updateProfilePhotoError && (
+                      <Alert
+                        className="text-center"
+                        aria-live="assertive"
+                        variant="danger"
+                        role="alert"
+                      >
+                        {updateProfilePhotoError}
+                      </Alert>
+                    )}
+
+                    {deleteUserProfileError && (
+                      <Alert
+                        className="text-center"
+                        aria-live="assertive"
+                        variant="danger"
+                        role="alert"
+                      >
+                        {deleteUserProfileError}
+                      </Alert>
+                    )}
+
+                    <div className="d-flex flex-column gap-3 flex-sm-row align-items-center text-center text-sm-start">
+                      <div className={userProfilePhotoContainer}>
+                        {isAuthenticated &&
+                          currentUser?._id === getUserProfileUser?._id &&
+                          (!image ? (
+                            <>
+                              <label htmlFor="profile-photo">change</label>
+                              <input
+                                onChange={handleImageChange}
+                                className="d-none"
+                                id="profile-photo"
+                                accept="image/*"
+                                type="file"
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <Button onClick={cancelImageUpload}>
+                                Cancel
+                              </Button>
+                            </>
+                          ))}
+                        <img
+                          src={preview ?? getUserProfileUser?.profilePhoto.url}
+                          alt={getUserProfileUser?.username}
+                          className={userProfilePhoto}
+                        />
+                      </div>
+                      <ul className={userInfoList}>
+                        <li>Username: {getUserProfileUser?.username}</li>
+                        <li>Email: {getUserProfileUser?.email}</li>
+                        {getUserProfileUser?.bio && (
+                          <li>Bio: {getUserProfileUser.bio}</li>
+                        )}
+                        <li>
+                          Join Us:{" "}
+                          {formatTimeAgo(getUserProfileUser?.createdAt || "")}
+                        </li>
+                      </ul>
+                    </div>
+                  </Card.Body>
+                  <Card.Footer>
+                    <div className="d-flex gap-2 justify-content-between align-items-center">
+                      <Link
+                        className="text-decoration-none"
+                        aria-label="Get Your Posts"
+                        to="/posts/posts-list"
+                        state={{
+                          username: getUserProfileUser?.username,
+                          userPosts: getUserProfileUser?.posts,
+                        }}
+                      >
+                        User Posts
+                      </Link>
+                      <div className="d-flex column-gap-2">
+                        {isAuthenticated &&
+                          currentUser?._id === getUserProfileUser?._id &&
+                          image && (
+                            <Button
+                              aria-busy={updateProfilePhotoStatus === "pending"}
+                              disabled={updateProfilePhotoStatus === "pending"}
+                              onClick={saveImage}
+                            >
+                              {updateProfilePhotoStatus === "pending" ? (
+                                <>
+                                  <Spinner
+                                    aria-label="Update user profile"
+                                    animation="border"
+                                    role="status"
+                                    size="sm"
+                                  />{" "}
+                                  Saving...
+                                </>
+                              ) : (
+                                "Save"
+                              )}
+                            </Button>
+                          )}
+                        {isAuthenticated &&
+                          currentUser?._id === getUserProfileUser?._id && (
+                            <Button
+                              aria-busy={
+                                deleteUserProfileStatus ===
+                                getUserProfileUser?._id
+                              }
+                              disabled={
+                                deleteUserProfileStatus ===
+                                getUserProfileUser?._id
+                              }
+                              onClick={deleteProfile}
+                            >
+                              {deleteUserProfileStatus ===
+                              getUserProfileUser?._id ? (
+                                <>
+                                  <Spinner
+                                    aria-label="Delete user profile"
+                                    animation="border"
+                                    role="status"
+                                    size="sm"
+                                  />{" "}
+                                  Removing account...
+                                </>
+                              ) : (
+                                "Delete"
+                              )}
+                            </Button>
+                          )}
+                      </div>
+                    </div>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            </Row>
+          </Loading>
+        </Container>
+      </section>
+    </>
   );
 };
 

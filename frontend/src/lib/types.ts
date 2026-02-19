@@ -1,3 +1,7 @@
+/**
+ * @file src/lib/types.ts
+ */
+
 export type TStatus = "idle" | "pending" | "succeeded" | "failed";
 
 // don't return boolean => return value is string if the condtion is true

@@ -1,3 +1,7 @@
+/**
+ * @file src/components/guards/admin-guard/index.tsx
+ */
+
 import {
   selectIsAdmin,
   selectIsAuthenticated,

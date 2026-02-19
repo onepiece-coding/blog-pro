@@ -1,3 +1,7 @@
+/**
+ * @file src/store/hooks.ts
+ */
+
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from ".";
 

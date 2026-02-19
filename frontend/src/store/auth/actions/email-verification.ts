@@ -1,3 +1,7 @@
+/**
+ * @file src/store/auth/actions/email-verification.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 

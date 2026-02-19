@@ -1,3 +1,7 @@
+/**
+ * @file src/store/users/actions/delete-user-profile.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 

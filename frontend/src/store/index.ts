@@ -1,3 +1,7 @@
+/**
+ * @file src/store/index.ts
+ */
+
 import { configureStore } from "@reduxjs/toolkit";
 
 import CategoriesReducer from "./categories/categories-slice";

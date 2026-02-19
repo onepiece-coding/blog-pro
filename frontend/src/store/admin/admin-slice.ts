@@ -1,13 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { type IInfo, type TStatus } from "@/lib/types";
+/**
+ * @file src/store/admin/admin-slice.ts
+ */
+
 import { createCategory } from "../categories/categories-slice";
+import { handlePending, handleRejected } from "@/lib/utils";
+import { deleteComment } from "../comments/comments-slice";
 import { deleteUserProfile } from "../users/users-slice";
+import { type IInfo, type TStatus } from "@/lib/types";
 import { deletePost } from "../posts/posts-slice";
+import { createSlice } from "@reduxjs/toolkit";
 
 import deleteCategory from "../categories/actions/delete-category";
 import getAllInfo from "./actions/get-all-info";
-import { deleteComment } from "../comments/comments-slice";
-import { handlePending, handleRejected } from "@/lib/utils";
 
 interface IAdminState {
   operations: {

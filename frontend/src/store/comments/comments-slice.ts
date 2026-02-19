@@ -1,11 +1,15 @@
+/**
+ * @file src/store/comments/comments-slice.ts
+ */
+
 import { isString, type IComment, type TStatus } from "@/lib/types";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { handlePending, handleRejected } from "@/lib/utils";
 
 import getAllComments from "./actions/get-all-comments";
 import createComment from "./actions/create-comment";
 import updateComment from "./actions/update-comment";
 import deleteComment from "./actions/delete-comment";
-import { handlePending, handleRejected } from "@/lib/utils";
 
 interface ICommentsState {
   operations: {

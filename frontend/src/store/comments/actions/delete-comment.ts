@@ -1,3 +1,7 @@
+/**
+ * @file src/store/comments/actions/delete-comment.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 

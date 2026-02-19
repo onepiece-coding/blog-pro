@@ -1,3 +1,7 @@
+/**
+ * @file src/store/posts/actions/create-post.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 

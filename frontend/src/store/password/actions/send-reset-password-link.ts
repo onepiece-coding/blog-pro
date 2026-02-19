@@ -1,3 +1,7 @@
+/**
+ * @file src/store/password/actions/send-reset-password-link.ts
+ */
+
 import type { TSendResetPasswordLinkSchema } from "@/validations";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";

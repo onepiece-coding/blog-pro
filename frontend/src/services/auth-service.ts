@@ -1,3 +1,7 @@
+/**
+ * @file src/services/auth-service.ts
+ */
+
 import type { IUser } from "@/lib/types";
 
 const TOKEN_KEY = "access_token";

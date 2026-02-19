@@ -181,12 +181,11 @@ const PostDetails = () => {
                   <Card.Header>
                     <div className="d-flex gap-2 justify-content-between align-items-center">
                       <Link
-                        to={`/posts/${getSinglePostRecord?._id}/post-comments`}
                         aria-label="Get the post comments"
                         className="text-decoration-none"
-                        state={getSinglePostRecord}
+                        to={`/posts/posts-list`}
                       >
-                        Post Comments
+                        Get All Posts
                       </Link>
                       {isAuthenticated &&
                         currentUser?._id === getSinglePostRecord?.user._id && (
@@ -303,7 +302,7 @@ const PostDetails = () => {
                               Toggling like...
                             </>
                           ) : (
-                            `Like (${getSinglePostRecord?.likes.length})`
+                            `Likes (${getSinglePostRecord?.likes.length})`
                           )}
                         </Button>
                       )}
@@ -318,11 +317,12 @@ const PostDetails = () => {
                   <Card.Footer>
                     <div className="d-flex gap-2 justify-content-between align-items-center">
                       <Link
+                        to={`/posts/${getSinglePostRecord?._id}/post-comments`}
                         aria-label="Get the post comments"
                         className="text-decoration-none"
-                        to={`/posts/posts-list`}
+                        state={getSinglePostRecord}
                       >
-                        Get All Posts
+                        Post Comments
                       </Link>
                       <div className="d-flex column-gap-2">
                         {isAuthenticated &&

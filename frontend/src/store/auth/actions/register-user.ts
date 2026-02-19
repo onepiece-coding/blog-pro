@@ -1,3 +1,7 @@
+/**
+ * @file src/store/auth/actions/register-user.ts
+ */
+
 import type { TRegisterSchema } from "@/validations";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";

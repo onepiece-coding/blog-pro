@@ -1,4 +1,6 @@
-// /src/components/common/navbar/navbar-items/index.tsx
+/**
+ * @file src/components/common/navbar/navbar-items/index.tsx
+ */
 
 import { Nav, NavDropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";

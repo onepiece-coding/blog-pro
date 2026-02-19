@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/admin-dashboard/manage-comments/index.tsx
+ */
+
 import {
   commentsCleanUp,
   deleteComment,
@@ -79,92 +83,96 @@ const ManageComments = () => {
   }, [dispatch, pageNumber]);
 
   return (
-    <Loading status={getAllCommentsStatus} error={getAllCommentsError}>
-      <div className="d-flex flex-column row-gap-3">
-        {deleteCommentError && (
-          <Alert
-            className="text-center mb-0"
-            aria-live="assertive"
-            variant="danger"
-            role="alert"
-          >
-            {deleteCommentError}
-          </Alert>
-        )}
+    <>
+      <title>Admin Dashboard | Manage Comments</title>
 
-        <div className="table-responsive">
-          <Table striped bordered hover className="mb-0">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Comment</th>
-                <th>Author</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getAllCommentsRecords.length === 0 ? (
-                <tr className="text-center">
-                  <td colSpan={5} className="text-info">
-                    There is no comments to view!
-                  </td>
+      <Loading status={getAllCommentsStatus} error={getAllCommentsError}>
+        <div className="d-flex flex-column row-gap-3">
+          {deleteCommentError && (
+            <Alert
+              className="text-center mb-0"
+              aria-live="assertive"
+              variant="danger"
+              role="alert"
+            >
+              {deleteCommentError}
+            </Alert>
+          )}
+
+          <div className="table-responsive">
+            <Table striped bordered hover className="mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Comment</th>
+                  <th>Author</th>
+                  <th>Actions</th>
                 </tr>
-              ) : (
-                getAllCommentsRecords.map((comment, index) => (
-                  <tr key={comment._id}>
-                    <td>{index + 1}</td>
-                    <td title={comment.text}>
-                      {comment.text.substring(0, 70)}
-                      {comment.text.length > 70 && "..."}
-                    </td>
-                    <td>
-                      <Link
-                        className="d-flex align-items-center gap-2 text-decoration-none"
-                        to={`/users/${comment.user._id}/user-profile`}
-                      >
-                        <img
-                          src={comment.user.profilePhoto.url}
-                          alt={comment.user.username}
-                          className="rounded-circle"
-                          width={40}
-                          height={40}
-                        />
-                        <span>{comment.user.username}</span>
-                      </Link>
-                    </td>
-                    <td>
-                      <Button
-                        onClick={() => deleteCommentHandler(comment._id)}
-                        disabled={isDeleting === comment._id}
-                        variant="danger"
-                        size="sm"
-                      >
-                        {isDeleting === comment._id ? (
-                          <Spinner
-                            aria-label="Delete comment"
-                            animation="border"
-                            role="status"
-                            size="sm"
-                          />
-                        ) : (
-                          <TrashIcon width={16} height={16} />
-                        )}
-                      </Button>
+              </thead>
+              <tbody>
+                {getAllCommentsRecords.length === 0 ? (
+                  <tr className="text-center">
+                    <td colSpan={5} className="text-info">
+                      There is no comments to view!
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-        </div>
+                ) : (
+                  getAllCommentsRecords.map((comment, index) => (
+                    <tr key={comment._id}>
+                      <td>{index + 1}</td>
+                      <td title={comment.text}>
+                        {comment.text.substring(0, 70)}
+                        {comment.text.length > 70 && "..."}
+                      </td>
+                      <td>
+                        <Link
+                          className="d-flex align-items-center gap-2 text-decoration-none"
+                          to={`/users/${comment.user._id}/user-profile`}
+                        >
+                          <img
+                            src={comment.user.profilePhoto.url}
+                            alt={comment.user.username}
+                            className="rounded-circle"
+                            width={40}
+                            height={40}
+                          />
+                          <span>{comment.user.username}</span>
+                        </Link>
+                      </td>
+                      <td>
+                        <Button
+                          onClick={() => deleteCommentHandler(comment._id)}
+                          disabled={isDeleting === comment._id}
+                          variant="danger"
+                          size="sm"
+                        >
+                          {isDeleting === comment._id ? (
+                            <Spinner
+                              aria-label="Delete comment"
+                              animation="border"
+                              role="status"
+                              size="sm"
+                            />
+                          ) : (
+                            <TrashIcon width={16} height={16} />
+                          )}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </div>
 
-        <Pagination
-          totalPages={getAllCommentsTotalPages}
-          handlePageChange={handlePageChange}
-          pageNumber={pageNumber}
-        />
-      </div>
-    </Loading>
+          <Pagination
+            totalPages={getAllCommentsTotalPages}
+            handlePageChange={handlePageChange}
+            pageNumber={pageNumber}
+          />
+        </div>
+      </Loading>
+    </>
   );
 };
 

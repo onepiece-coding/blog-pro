@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/admin-dashboard/manage-posts/index.tsx
+ */
+
 import { deletePost, getPosts, postsCleanUp } from "@/store/posts/posts-slice";
 import { Alert, Button, Spinner, Table } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -84,93 +88,97 @@ const ManagePosts = () => {
   }, [dispatch, pageNumber, text, category]);
 
   return (
-    <Loading status={getPostsStatus} error={getPostsError}>
-      <div className="d-flex flex-column row-gap-3">
-        {deletePostError && (
-          <Alert
-            className="text-center mb-0"
-            aria-live="assertive"
-            variant="danger"
-            role="alert"
-          >
-            {deletePostError}
-          </Alert>
-        )}
+    <>
+      <title>Admin Dashboard | Manage Posts</title>
 
-        <Search handleSearchChange={handleTextChange} label={"Post Title"} />
+      <Loading status={getPostsStatus} error={getPostsError}>
+        <div className="d-flex flex-column row-gap-3">
+          {deletePostError && (
+            <Alert
+              className="text-center mb-0"
+              aria-live="assertive"
+              variant="danger"
+              role="alert"
+            >
+              {deletePostError}
+            </Alert>
+          )}
 
-        <Filtration handleCategoryChange={handleCategoryChange} />
+          <Search handleSearchChange={handleTextChange} label={"Post Title"} />
 
-        <div className="table-responsive">
-          <Table striped bordered hover className="mb-0">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Post Title</th>
-                <th>Post Category</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getPostsRecords.length === 0 ? (
-                <tr className="text-center">
-                  <td colSpan={5} className="text-info">
-                    There is no posts to view!
-                  </td>
+          <Filtration handleCategoryChange={handleCategoryChange} />
+
+          <div className="table-responsive">
+            <Table striped bordered hover className="mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Post Title</th>
+                  <th>Post Category</th>
+                  <th>Actions</th>
                 </tr>
-              ) : (
-                getPostsRecords.map((post) => (
-                  <tr key={post._id}>
-                    <td>
-                      <img
-                        src={post.image.url}
-                        alt={post.title}
-                        width={70}
-                        className="rounded-2"
-                      />
-                    </td>
-                    <td>{post.title}</td>
-                    <td>{post.categoryId.title}</td>
-                    <td>
-                      <div className="d-flex gap-2">
-                        <Link to={`/posts/${post._id}/post-details`}>
-                          <Button variant="info" size="sm">
-                            <EyeIcon width={16} height={16} />
-                          </Button>
-                        </Link>
-                        <Button
-                          onClick={() => deletePostHandler(post._id)}
-                          disabled={deletePostStatus === post._id}
-                          variant="danger"
-                          size="sm"
-                        >
-                          {deletePostStatus === post._id ? (
-                            <Spinner
-                              aria-label="Delete post"
-                              animation="border"
-                              role="status"
-                              size="sm"
-                            />
-                          ) : (
-                            <TrashIcon width={16} height={16} />
-                          )}
-                        </Button>
-                      </div>
+              </thead>
+              <tbody>
+                {getPostsRecords.length === 0 ? (
+                  <tr className="text-center">
+                    <td colSpan={5} className="text-info">
+                      There is no posts to view!
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-        </div>
+                ) : (
+                  getPostsRecords.map((post) => (
+                    <tr key={post._id}>
+                      <td>
+                        <img
+                          src={post.image.url}
+                          alt={post.title}
+                          width={70}
+                          className="rounded-2"
+                        />
+                      </td>
+                      <td>{post.title}</td>
+                      <td>{post.categoryId.title}</td>
+                      <td>
+                        <div className="d-flex gap-2">
+                          <Link to={`/posts/${post._id}/post-details`}>
+                            <Button variant="info" size="sm">
+                              <EyeIcon width={16} height={16} />
+                            </Button>
+                          </Link>
+                          <Button
+                            onClick={() => deletePostHandler(post._id)}
+                            disabled={deletePostStatus === post._id}
+                            variant="danger"
+                            size="sm"
+                          >
+                            {deletePostStatus === post._id ? (
+                              <Spinner
+                                aria-label="Delete post"
+                                animation="border"
+                                role="status"
+                                size="sm"
+                              />
+                            ) : (
+                              <TrashIcon width={16} height={16} />
+                            )}
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </div>
 
-        <Pagination
-          handlePageChange={handlePageChange}
-          totalPages={getPostsTotalPages}
-          pageNumber={pageNumber}
-        />
-      </div>
-    </Loading>
+          <Pagination
+            handlePageChange={handlePageChange}
+            totalPages={getPostsTotalPages}
+            pageNumber={pageNumber}
+          />
+        </div>
+      </Loading>
+    </>
   );
 };
 

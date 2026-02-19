@@ -1,3 +1,7 @@
+/**
+ * @file src/lib/utils.ts
+ */
+
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { TStatus } from "./types";
 import { isAxiosError } from "axios";

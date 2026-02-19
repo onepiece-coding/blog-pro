@@ -1,3 +1,7 @@
+/**
+ * @file src/store/categories/actions/get-all-categories.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 import type { ICategory } from "@/lib/types";

@@ -44,20 +44,19 @@
  *     TypeScript surfaces any future interface changes at compile time.
  */
 
-import React from "react";
+import { configureStore, type Reducer } from "@reduxjs/toolkit";
+import type { IToast, IUser } from "@/lib/types";
+import { MemoryRouter } from "react-router-dom";
+import type { RootState } from "@/store";
+import { Provider } from "react-redux";
 import {
   render,
   type RenderOptions as RTLRenderOptions,
 } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import { configureStore, type Reducer } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
 
-import toastsReducer from "@/store/toasts/toasts-slice";
 import passwordReducer from "@/store/password/password-slice";
+import toastsReducer from "@/store/toasts/toasts-slice";
 import authReducer from "@/store/auth/auth-slice";
-import type { RootState } from "@/store";
-import type { IToast, IUser } from "@/lib/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES

@@ -1,3 +1,7 @@
+/**
+ * @file src/validations/comments-schemas.ts
+ */
+
 import z from "zod";
 
 const commentsSchema = z.object({

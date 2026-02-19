@@ -1,3 +1,7 @@
+/**
+ * @file src/validations/categories-schemas.ts
+ */
+
 import z from "zod";
 
 const createCategorySchema = z.object({

@@ -1,3 +1,7 @@
+/**
+ * @file src/store/users/actions/get-all-users.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 import type { IUser } from "@/lib/types";

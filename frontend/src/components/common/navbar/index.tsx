@@ -1,4 +1,6 @@
-// /src/components/common/navbar/index.tsx
+/**
+ * @file src/components/common/navbar/index.tsx
+ */
 
 import { Navbar as BsNavbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";

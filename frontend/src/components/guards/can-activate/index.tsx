@@ -1,3 +1,7 @@
+/**
+ * @file src/components/guards/can-activate/index.tsx
+ */
+
 import { selectIsAuthenticated } from "@/store/auth/auth-selectors";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppSelector } from "@/store/hooks";

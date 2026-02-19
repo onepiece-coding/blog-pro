@@ -1,3 +1,7 @@
+/**
+ * @file src/store/admin/actions/get-all-info.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 import type { IInfo } from "@/lib/types";

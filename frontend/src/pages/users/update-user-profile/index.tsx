@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/users/update-user-profile/index.tsx
+ */
+
 import { clearUsersError, updateUserProfile } from "@/store/users/users-slice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -5,7 +9,6 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "@/components/forms";
 import { Heading } from "@/components/common";
-import { useDocumentTitle } from "@/hooks";
 import { Link } from "react-router-dom";
 import {
   selectUpdateUserProfileStatus,
@@ -32,8 +35,6 @@ import { addToast } from "@/store/toasts/toasts-slice";
 const FORM_ID = "update-user-profile-form";
 
 const UpdateUserProfile = () => {
-  useDocumentTitle("Blog Pro - Update User Profile");
-
   const { userId } = useParams();
 
   const status = useAppSelector(selectUpdateUserProfileStatus);
@@ -95,112 +96,116 @@ const UpdateUserProfile = () => {
   }, [dispatch]);
 
   return (
-    <section
-      aria-labelledby="update-user-profile-heading"
-      className="my-3"
-      role="region"
-    >
-      <Container>
-        <Row>
-          <Col lg={{ span: "8", offset: "2" }}>
-            <Card className="viewport-card">
-              <Card.Header>
-                <Heading
-                  id="update-user-profile-heading"
-                  title="Update User Profile"
-                />
-              </Card.Header>
+    <>
+      <title>Blog Pro - Update User Profile</title>
 
-              <Card.Body>
-                {error && (
-                  <Alert
-                    className="text-center"
-                    aria-live="assertive"
-                    variant="danger"
-                    role="alert"
+      <section
+        aria-labelledby="update-user-profile-heading"
+        className="my-3"
+        role="region"
+      >
+        <Container>
+          <Row>
+            <Col lg={{ span: "8", offset: "2" }}>
+              <Card className="viewport-card">
+                <Card.Header>
+                  <Heading
+                    id="update-user-profile-heading"
+                    title="Update User Profile"
+                  />
+                </Card.Header>
+
+                <Card.Body>
+                  {error && (
+                    <Alert
+                      className="text-center"
+                      aria-live="assertive"
+                      variant="danger"
+                      role="alert"
+                    >
+                      {error}
+                    </Alert>
+                  )}
+
+                  <Form
+                    onSubmit={updateUserProfileForm.handleSubmit(onSubmit)}
+                    aria-labelledby="update-user-profile-heading"
+                    id={FORM_ID}
+                    noValidate
                   >
-                    {error}
-                  </Alert>
-                )}
+                    <FormField<TUpdateUserInput, "username", TUpdateUserOutput>
+                      placeholder="Username"
+                      control={updateUserProfileForm.control}
+                      formId={FORM_ID}
+                      label="Username"
+                      name="username"
+                      type="text"
+                    />
 
-                <Form
-                  onSubmit={updateUserProfileForm.handleSubmit(onSubmit)}
-                  aria-labelledby="update-user-profile-heading"
-                  id={FORM_ID}
-                  noValidate
-                >
-                  <FormField<TUpdateUserInput, "username", TUpdateUserOutput>
-                    placeholder="Username"
-                    control={updateUserProfileForm.control}
-                    formId={FORM_ID}
-                    label="Username"
-                    name="username"
-                    type="text"
-                  />
+                    <FormField<TUpdateUserInput, "bio", TUpdateUserOutput>
+                      placeholder="Bio"
+                      control={updateUserProfileForm.control}
+                      formId={FORM_ID}
+                      label="Bio"
+                      name="bio"
+                      type="text"
+                    />
 
-                  <FormField<TUpdateUserInput, "bio", TUpdateUserOutput>
-                    placeholder="Bio"
-                    control={updateUserProfileForm.control}
-                    formId={FORM_ID}
-                    label="Bio"
-                    name="bio"
-                    type="text"
-                  />
+                    <FormField
+                      placeholder="Password"
+                      control={updateUserProfileForm.control}
+                      label="Password"
+                      formId={FORM_ID}
+                      name="password"
+                      type="password"
+                    />
 
-                  <FormField
-                    placeholder="Password"
-                    control={updateUserProfileForm.control}
-                    label="Password"
-                    formId={FORM_ID}
-                    name="password"
-                    type="password"
-                  />
+                    <FormField
+                      control={updateUserProfileForm.control}
+                      placeholder="Confirm Password"
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      formId={FORM_ID}
+                      type="password"
+                    />
 
-                  <FormField
-                    control={updateUserProfileForm.control}
-                    placeholder="Confirm Password"
-                    label="Confirm Password"
-                    name="confirmPassword"
-                    formId={FORM_ID}
-                    type="password"
-                  />
+                    <Button
+                      aria-busy={status === "pending"}
+                      disabled={status === "pending"}
+                      type="submit"
+                    >
+                      {status === "pending" ? (
+                        <>
+                          <Spinner
+                            aria-label="Update user profile"
+                            animation="border"
+                            role="status"
+                            size="sm"
+                          />{" "}
+                          Updating...
+                        </>
+                      ) : (
+                        "Update"
+                      )}
+                    </Button>
+                  </Form>
+                </Card.Body>
 
-                  <Button
-                    aria-busy={status === "pending"}
-                    disabled={status === "pending"}
-                    type="submit"
+                <Card.Footer>
+                  <Link
+                    className="text-decoration-none"
+                    aria-label="Update user profile"
+                    to={`/users/${userId}/user-profile`}
                   >
-                    {status === "pending" ? (
-                      <>
-                        <Spinner
-                          aria-label="Update user profile"
-                          animation="border"
-                          role="status"
-                          size="sm"
-                        />{" "}
-                        Updating...
-                      </>
-                    ) : (
-                      "Update"
-                    )}
-                  </Button>
-                </Form>
-              </Card.Body>
-
-              <Card.Footer>
-                <Link
-                  className="text-decoration-none"
-                  aria-label="Update user profile"
-                  to={`/users/${userId}/user-profile`}
-                >
-                  Go back to your profile?
-                </Link>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+                    Go back to your profile?
+                  </Link>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </>
   );
 };
 

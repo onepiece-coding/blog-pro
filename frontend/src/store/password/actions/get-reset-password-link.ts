@@ -1,3 +1,7 @@
+/**
+ * @file src/store/password/actions/get-reset-password-link.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 

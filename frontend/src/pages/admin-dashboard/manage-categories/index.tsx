@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/admin-dashboard/manage-categories/index.tsx
+ */
+
 import { Alert, Button, Spinner, Table } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Pagination, Search } from "@/components/common";
@@ -82,75 +86,82 @@ const ManageCategories = () => {
   }, [dispatch, pageNumber, category]);
 
   return (
-    <Loading status={getAllCategoriesStatus} error={getAllCategoriesError}>
-      <div className="d-flex flex-column row-gap-3">
-        {deleteCategoryError && (
-          <Alert
-            className="text-center mb-0"
-            aria-live="assertive"
-            variant="danger"
-            role="alert"
-          >
-            {deleteCategoryError}
-          </Alert>
-        )}
+    <>
+      <title>Admin Dashboard | Manage Categories</title>
 
-        <Search handleSearchChange={handleCategoryChange} label={"Category"} />
+      <Loading status={getAllCategoriesStatus} error={getAllCategoriesError}>
+        <div className="d-flex flex-column row-gap-3">
+          {deleteCategoryError && (
+            <Alert
+              className="text-center mb-0"
+              aria-live="assertive"
+              variant="danger"
+              role="alert"
+            >
+              {deleteCategoryError}
+            </Alert>
+          )}
 
-        <div className="table-responsive">
-          <Table striped bordered hover className="mb-0">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Category Title</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getAllCategoriesRecords.length === 0 ? (
-                <tr className="text-center">
-                  <td colSpan={5} className="text-info">
-                    There is no categories to view!
-                  </td>
+          <Search
+            handleSearchChange={handleCategoryChange}
+            label={"Category"}
+          />
+
+          <div className="table-responsive">
+            <Table striped bordered hover className="mb-0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Category Title</th>
+                  <th>Actions</th>
                 </tr>
-              ) : (
-                getAllCategoriesRecords.map((category, index) => (
-                  <tr key={category._id}>
-                    <td>{index + 1}</td>
-                    <td>{category.title}</td>
-                    <td>
-                      <Button
-                        onClick={() => deleteCategoryHandler(category._id)}
-                        disabled={deleteCategoryStatus === category._id}
-                        variant="danger"
-                        size="sm"
-                      >
-                        {deleteCategoryStatus === category._id ? (
-                          <Spinner
-                            aria-label="Delete category"
-                            animation="border"
-                            role="status"
-                            size="sm"
-                          />
-                        ) : (
-                          <TrashIcon width={16} height={16} />
-                        )}
-                      </Button>
+              </thead>
+              <tbody>
+                {getAllCategoriesRecords.length === 0 ? (
+                  <tr className="text-center">
+                    <td colSpan={5} className="text-info">
+                      There is no categories to view!
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </Table>
-        </div>
+                ) : (
+                  getAllCategoriesRecords.map((category, index) => (
+                    <tr key={category._id}>
+                      <td>{index + 1}</td>
+                      <td>{category.title}</td>
+                      <td>
+                        <Button
+                          onClick={() => deleteCategoryHandler(category._id)}
+                          disabled={deleteCategoryStatus === category._id}
+                          variant="danger"
+                          size="sm"
+                        >
+                          {deleteCategoryStatus === category._id ? (
+                            <Spinner
+                              aria-label="Delete category"
+                              animation="border"
+                              role="status"
+                              size="sm"
+                            />
+                          ) : (
+                            <TrashIcon width={16} height={16} />
+                          )}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </Table>
+          </div>
 
-        <Pagination
-          totalPages={getAllCategoriesTotalPages}
-          handlePageChange={handlePageChange}
-          pageNumber={pageNumber}
-        />
-      </div>
-    </Loading>
+          <Pagination
+            totalPages={getAllCategoriesTotalPages}
+            handlePageChange={handlePageChange}
+            pageNumber={pageNumber}
+          />
+        </div>
+      </Loading>
+    </>
   );
 };
 

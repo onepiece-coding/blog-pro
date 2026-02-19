@@ -1,3 +1,7 @@
+/**
+ * @file src/layouts/dashboard-layout/index.tsx
+ */
+
 import { NavLink, Outlet } from "react-router-dom";
 import { Card, Container } from "react-bootstrap";
 import { Heading } from "@/components/common";

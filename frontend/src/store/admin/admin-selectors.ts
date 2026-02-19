@@ -1,3 +1,7 @@
+/**
+ * @file src/store/admin/admin-selectors.ts
+ */
+
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 

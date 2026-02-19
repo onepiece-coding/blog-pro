@@ -1,3 +1,7 @@
+/**
+ * @file src/store/users/actions/update-user-profile.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 import type { IUser } from "@/lib/types";

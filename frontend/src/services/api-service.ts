@@ -1,3 +1,7 @@
+/**
+ * @file src/services/api-service.ts
+ */
+
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import { logout } from "@/store/auth/auth-slice";
 import { TokenService } from "./auth-service";

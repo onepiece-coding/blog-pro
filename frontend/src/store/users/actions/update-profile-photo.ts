@@ -1,3 +1,7 @@
+/**
+ * @file src/store/users/actions/update-profile-photo.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 import type { IImage } from "@/lib/types";

@@ -1,3 +1,7 @@
+/**
+ * @file src/store/posts/actions/get-post-comments.ts
+ */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosErrorHandler } from "@/lib/utils";
 import type { IComment } from "@/lib/types";

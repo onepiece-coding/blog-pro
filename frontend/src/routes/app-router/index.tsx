@@ -1,6 +1,10 @@
+/**
+ * @file src/routes/app-router/index.tsx
+ */
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { CanActivate, AdminGuard } from "@/components/guards";
-import { WithSuspense } from "./with-suspense.component";
+import { WithSuspense } from "../with-suspense";
 import { lazy } from "react";
 
 const EmailVerification = lazy(() => import("@/pages/auth/email-verification"));

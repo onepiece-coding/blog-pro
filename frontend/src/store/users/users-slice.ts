@@ -1,3 +1,7 @@
+/**
+ * @file src/store/users/users-slice.ts
+ */
+
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { isString, type IUser, type TStatus } from "@/lib/types";
 

@@ -1,4 +1,6 @@
-// /src/layouts/main-layout/index.tsx
+/**
+ * @file src/layouts/main-layout/index.tsx
+ */
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Outlet, useNavigate } from "react-router-dom";

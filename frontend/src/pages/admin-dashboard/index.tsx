@@ -1,3 +1,7 @@
+/**
+ * @file src/pages/admin-dashboard/index.tsx
+ */
+
 import { Alert, Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import { createCategory } from "@/store/categories/categories-slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -73,74 +77,80 @@ const AdminDashboard = () => {
   }, [getAllInfoRecord, dispatch]);
 
   return (
-    <div className="d-flex flex-column gap-3">
-      <Loading status={getAllInfoStatus} error={getAllInfoError}>
-        <Row className="d-flex flex-column flex-sm-row row-gap-3">
-          {getAllInfoRecord ? (
-            Object.entries(getAllInfoRecord).map(([key, value]) => {
-              return (
-                <Col key={key} sm={6} md={3}>
-                  <div className="w-100 p-3 bg-light text-dark text-center rounded-2 border">
-                    <h3 className="mb-0">{value}</h3>
-                    <span className="text-muted text-capitalize">
-                      {key.replace(/([A-Z])/g, " $1")}{" "}
-                    </span>
-                  </div>
-                </Col>
-              );
-            })
-          ) : (
-            <p className="text-info mb-0">There is no informations to view!</p>
-          )}
-        </Row>
-      </Loading>
+    <>
+      <title>Admin Dashboard</title>
 
-      {createCategoryError && (
-        <Alert
-          className="text-center mb-0"
-          aria-live="assertive"
-          variant="danger"
-          role="alert"
-        >
-          {createCategoryError}
-        </Alert>
-      )}
+      <div className="d-flex flex-column gap-3">
+        <Loading status={getAllInfoStatus} error={getAllInfoError}>
+          <Row className="d-flex flex-column flex-sm-row row-gap-3">
+            {getAllInfoRecord ? (
+              Object.entries(getAllInfoRecord).map(([key, value]) => {
+                return (
+                  <Col key={key} sm={6} md={3}>
+                    <div className="w-100 p-3 bg-light text-dark text-center rounded-2 border">
+                      <h3 className="mb-0">{value}</h3>
+                      <span className="text-muted text-capitalize">
+                        {key.replace(/([A-Z])/g, " $1")}{" "}
+                      </span>
+                    </div>
+                  </Col>
+                );
+              })
+            ) : (
+              <p className="text-info mb-0">
+                There is no informations to view!
+              </p>
+            )}
+          </Row>
+        </Loading>
 
-      <Form
-        onSubmit={handleSubmit(onSubmit)}
-        className="d-flex align-items-start gap-2"
-        aria-labelledby="comments-heading"
-        id={FORM_ID}
-        noValidate
-      >
-        <FormField
-          className="mb-0 flex-grow-1"
-          placeholder="Category Title"
-          label="Category Title"
-          control={control}
-          formId={FORM_ID}
-          srOnly={true}
-          name="title"
-          type="text"
-        />
-        <Button
-          aria-busy={createCategoryStatus === "pending"}
-          disabled={createCategoryStatus === "pending"}
-          type="submit"
+        {createCategoryError && (
+          <Alert
+            className="text-center mb-0"
+            aria-live="assertive"
+            variant="danger"
+            role="alert"
+          >
+            {createCategoryError}
+          </Alert>
+        )}
+
+        <Form
+          onSubmit={handleSubmit(onSubmit)}
+          className="d-flex align-items-start gap-2"
+          aria-labelledby="comments-heading"
+          id={FORM_ID}
+          noValidate
         >
-          {createCategoryStatus === "pending" ? (
-            <Spinner
-              aria-label="Create Category"
-              animation="border"
-              role="status"
-              size="sm"
-            />
-          ) : (
-            <AddPlusIcon width={16} height={16} />
-          )}
-        </Button>
-      </Form>
-    </div>
+          <FormField
+            className="mb-0 flex-grow-1"
+            placeholder="Category Title"
+            label="Category Title"
+            control={control}
+            formId={FORM_ID}
+            srOnly={true}
+            name="title"
+            type="text"
+          />
+          <Button
+            aria-busy={createCategoryStatus === "pending"}
+            disabled={createCategoryStatus === "pending"}
+            type="submit"
+          >
+            {createCategoryStatus === "pending" ? (
+              <Spinner
+                aria-label="Create Category"
+                animation="border"
+                role="status"
+                size="sm"
+              />
+            ) : (
+              <AddPlusIcon width={16} height={16} />
+            )}
+          </Button>
+        </Form>
+      </div>
+    </>
   );
 };
 

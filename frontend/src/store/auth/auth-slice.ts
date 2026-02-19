@@ -1,3 +1,7 @@
+/**
+ * @file src/store/auth/auth-slice.ts
+ */
+
 import { updateProfilePhoto, updateUserProfile } from "../users/users-slice";
 import { TokenService, UserService } from "@/services/auth-service";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
