@@ -1,3 +1,7 @@
+/**
+ * @file src/components/forms/custom-select/index.tsx
+ */
+
 import { CloseButton, Form, Spinner } from "react-bootstrap";
 import { useRef, useState, type UIEvent } from "react";
 import type { TStatus } from "@/lib/types";

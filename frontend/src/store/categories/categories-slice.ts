@@ -1,3 +1,7 @@
+/**
+ * @file src/store/categories/categories-slice.ts
+ */
+
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { isString, type ICategory, type TStatus } from "@/lib/types";
 

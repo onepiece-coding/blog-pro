@@ -1,3 +1,7 @@
+/**
+ * @file src/components/blog/category-select/index.tsx
+ */
+
 import type { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 import { getAllCategories } from "@/store/categories/categories-slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";

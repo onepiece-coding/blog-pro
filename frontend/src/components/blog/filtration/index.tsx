@@ -1,3 +1,7 @@
+/**
+ * @file src/components/blog/filtration/index.tsx
+ */
+
 import { filtrationSchema, type TFiltrationSchema } from "@/validations";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

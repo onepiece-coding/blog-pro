@@ -1,9 +1,13 @@
+/**
+ * @file src/pages/posts/post-details/index.tsx
+ */
+
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { addToast } from "@/store/toasts/toasts-slice";
 import { Loading } from "@/components/feedback";
 import { Heading } from "@/components/common";
-import { useDocumentTitle } from "@/hooks";
 import { Link } from "react-router-dom";
 import {
   selectDeletePostError,
@@ -39,13 +43,10 @@ import {
 } from "react-bootstrap";
 
 import styles from "./styles.module.css";
-import { addToast } from "@/store/toasts/toasts-slice";
 
 const { postImageContainer, postImage } = styles;
 
 const PostDetails = () => {
-  useDocumentTitle("Blog Pro - Post Details");
-
   const { postId } = useParams();
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -159,216 +160,227 @@ const PostDetails = () => {
   }, [dispatch, postId]);
 
   return (
-    <section
-      aria-labelledby="post-details-heading"
-      className="my-3"
-      role="region"
-    >
-      <Container>
-        <Heading id="post-details-heading" title="Post Details" srOnly={true} />
-        <Loading status={getSinglePostStatus} error={getSinglePostError}>
-          <Row>
-            <Col lg={{ span: "8", offset: "2" }}>
-              <Card className="viewport-card">
-                <Card.Header>
-                  <div className="d-flex gap-2 justify-content-between align-items-center">
-                    <Link
-                      to={`/posts/${getSinglePostRecord?._id}/post-comments`}
-                      aria-label="Get the post comments"
-                      className="text-decoration-none"
-                      state={getSinglePostRecord}
-                    >
-                      Post Comments
-                    </Link>
-                    {isAuthenticated &&
-                      currentUser?._id === getSinglePostRecord?.user._id && (
-                        <Link
-                          to={`/posts/${getSinglePostRecord?._id}/update-post`}
-                          className="text-decoration-none"
-                          aria-label="Update Post"
-                          state={{
-                            title: getSinglePostRecord?.title,
-                            description: getSinglePostRecord?.description,
-                            categoryId: getSinglePostRecord?.categoryId._id,
-                          }}
-                        >
-                          Update Post
-                        </Link>
-                      )}
-                  </div>
-                </Card.Header>
-                <Card.Body>
-                  {updatePostImageError && (
-                    <Alert
-                      className="text-center"
-                      aria-live="assertive"
-                      variant="danger"
-                      role="alert"
-                    >
-                      {updatePostImageError}
-                    </Alert>
-                  )}
+    <>
+      <title>Blog Pro - Post Details</title>
 
-                  {deletePostError && (
-                    <Alert
-                      className="text-center"
-                      aria-live="assertive"
-                      variant="danger"
-                      role="alert"
-                    >
-                      {deletePostError}
-                    </Alert>
-                  )}
-
-                  {toggleLikeError && (
-                    <Alert
-                      className="text-center"
-                      aria-live="assertive"
-                      variant="danger"
-                      role="alert"
-                    >
-                      {toggleLikeError}
-                    </Alert>
-                  )}
-
-                  <div className={postImageContainer}>
-                    {isAuthenticated &&
-                      currentUser?._id === getSinglePostRecord?.user._id &&
-                      (!image ? (
-                        <>
-                          <label htmlFor="post-image">change</label>
-                          <input
-                            onChange={handleImageChange}
-                            className="d-none"
-                            accept="image/*"
-                            id="post-image"
-                            type="file"
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <Button onClick={cancelImageUpload}>Cancel</Button>
-                        </>
-                      ))}
-                    <img
-                      src={preview ?? getSinglePostRecord?.image.url}
-                      alt={getSinglePostRecord?.title}
-                      className={postImage}
-                    />
-                  </div>
-
-                  <div className="d-flex justify-content-between align-items-center gap-2 mt-3">
-                    <Link
-                      to={`/users/${getSinglePostRecord?.user._id}/user-profile`}
-                      className="d-flex align-items-center column-gap-2 text-decoration-none"
-                    >
-                      <img
-                        src={getSinglePostRecord?.user.profilePhoto.url}
-                        alt={getSinglePostRecord?.user.username}
-                        className="rounded-circle"
-                        width={70}
-                        height={70}
-                      />
-                      <strong>{getSinglePostRecord?.user.username}</strong>
-                    </Link>
-                    {currentUser && (
-                      <Button
-                        aria-busy={toggleLikeStatus === "pending"}
-                        disabled={toggleLikeStatus === "pending"}
-                        onClick={toggleLikeAction}
-                        variant={
-                          getSinglePostRecord?.likes.includes(currentUser?._id)
-                            ? "primary"
-                            : "outline-primary"
-                        }
+      <section
+        aria-labelledby="post-details-heading"
+        className="my-3"
+        role="region"
+      >
+        <Container>
+          <Heading
+            id="post-details-heading"
+            title="Post Details"
+            srOnly={true}
+          />
+          <Loading status={getSinglePostStatus} error={getSinglePostError}>
+            <Row>
+              <Col lg={{ span: "8", offset: "2" }}>
+                <Card className="viewport-card">
+                  <Card.Header>
+                    <div className="d-flex gap-2 justify-content-between align-items-center">
+                      <Link
+                        to={`/posts/${getSinglePostRecord?._id}/post-comments`}
+                        aria-label="Get the post comments"
+                        className="text-decoration-none"
+                        state={getSinglePostRecord}
                       >
-                        {toggleLikeStatus === "pending" ? (
-                          <>
-                            <Spinner
-                              aria-label="Toggle like"
-                              animation="border"
-                              role="status"
-                              size="sm"
-                            />{" "}
-                            Toggling like...
-                          </>
-                        ) : (
-                          `Like (${getSinglePostRecord?.likes.length})`
-                        )}
-                      </Button>
-                    )}
-                  </div>
-
-                  <h2 className="mt-3 h5">{getSinglePostRecord?.title}</h2>
-
-                  <p className="mt-3 mb-0">
-                    {getSinglePostRecord?.description}
-                  </p>
-                </Card.Body>
-                <Card.Footer>
-                  <div className="d-flex gap-2 justify-content-between align-items-center">
-                    <Link
-                      aria-label="Get the post comments"
-                      className="text-decoration-none"
-                      to={`/posts/posts-list`}
-                    >
-                      Get All Posts
-                    </Link>
-                    <div className="d-flex column-gap-2">
-                      {isAuthenticated &&
-                        currentUser?._id === getSinglePostRecord?.user._id &&
-                        image && (
-                          <Button
-                            aria-busy={updatePostImageStatus === "pending"}
-                            disabled={updatePostImageStatus === "pending"}
-                            onClick={saveImage}
-                          >
-                            {updatePostImageStatus === "pending" ? (
-                              <>
-                                <Spinner
-                                  aria-label="Update user profile"
-                                  animation="border"
-                                  role="status"
-                                  size="sm"
-                                />{" "}
-                                Saving...
-                              </>
-                            ) : (
-                              "Save"
-                            )}
-                          </Button>
-                        )}
+                        Post Comments
+                      </Link>
                       {isAuthenticated &&
                         currentUser?._id === getSinglePostRecord?.user._id && (
-                          <Button
-                            aria-busy={deletePostStatus === "pending"}
-                            disabled={deletePostStatus === "pending"}
-                            onClick={deleteSinglePost}
+                          <Link
+                            to={`/posts/${getSinglePostRecord?._id}/update-post`}
+                            className="text-decoration-none"
+                            aria-label="Update Post"
+                            state={{
+                              title: getSinglePostRecord?.title,
+                              description: getSinglePostRecord?.description,
+                              categoryId: getSinglePostRecord?.categoryId._id,
+                            }}
                           >
-                            {deletePostStatus === "pending" ? (
-                              <>
-                                <Spinner
-                                  aria-label="Delete user profile"
-                                  animation="border"
-                                  role="status"
-                                  size="sm"
-                                />{" "}
-                                Removing post...
-                              </>
-                            ) : (
-                              "Delete"
-                            )}
-                          </Button>
+                            Update Post
+                          </Link>
                         )}
                     </div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-          </Row>
-        </Loading>
-      </Container>
-    </section>
+                  </Card.Header>
+                  <Card.Body>
+                    {updatePostImageError && (
+                      <Alert
+                        className="text-center"
+                        aria-live="assertive"
+                        variant="danger"
+                        role="alert"
+                      >
+                        {updatePostImageError}
+                      </Alert>
+                    )}
+
+                    {deletePostError && (
+                      <Alert
+                        className="text-center"
+                        aria-live="assertive"
+                        variant="danger"
+                        role="alert"
+                      >
+                        {deletePostError}
+                      </Alert>
+                    )}
+
+                    {toggleLikeError && (
+                      <Alert
+                        className="text-center"
+                        aria-live="assertive"
+                        variant="danger"
+                        role="alert"
+                      >
+                        {toggleLikeError}
+                      </Alert>
+                    )}
+
+                    <div className={postImageContainer}>
+                      {isAuthenticated &&
+                        currentUser?._id === getSinglePostRecord?.user._id &&
+                        (!image ? (
+                          <>
+                            <label htmlFor="post-image">change</label>
+                            <input
+                              onChange={handleImageChange}
+                              className="d-none"
+                              accept="image/*"
+                              id="post-image"
+                              type="file"
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <Button onClick={cancelImageUpload}>Cancel</Button>
+                          </>
+                        ))}
+                      <img
+                        src={preview ?? getSinglePostRecord?.image.url}
+                        alt={getSinglePostRecord?.title}
+                        className={postImage}
+                      />
+                    </div>
+
+                    <div className="d-flex justify-content-between align-items-center gap-2 mt-3">
+                      <Link
+                        to={`/users/${getSinglePostRecord?.user._id}/user-profile`}
+                        className="d-flex align-items-center column-gap-2 text-decoration-none"
+                      >
+                        <img
+                          src={getSinglePostRecord?.user.profilePhoto.url}
+                          alt={getSinglePostRecord?.user.username}
+                          className="rounded-circle"
+                          width={70}
+                          height={70}
+                        />
+                        <strong>{getSinglePostRecord?.user.username}</strong>
+                      </Link>
+                      {currentUser && (
+                        <Button
+                          aria-busy={toggleLikeStatus === "pending"}
+                          disabled={toggleLikeStatus === "pending"}
+                          onClick={toggleLikeAction}
+                          variant={
+                            getSinglePostRecord?.likes.includes(
+                              currentUser?._id,
+                            )
+                              ? "primary"
+                              : "outline-primary"
+                          }
+                        >
+                          {toggleLikeStatus === "pending" ? (
+                            <>
+                              <Spinner
+                                aria-label="Toggle like"
+                                animation="border"
+                                role="status"
+                                size="sm"
+                              />{" "}
+                              Toggling like...
+                            </>
+                          ) : (
+                            `Like (${getSinglePostRecord?.likes.length})`
+                          )}
+                        </Button>
+                      )}
+                    </div>
+
+                    <h2 className="mt-3 h5">{getSinglePostRecord?.title}</h2>
+
+                    <p className="mt-3 mb-0">
+                      {getSinglePostRecord?.description}
+                    </p>
+                  </Card.Body>
+                  <Card.Footer>
+                    <div className="d-flex gap-2 justify-content-between align-items-center">
+                      <Link
+                        aria-label="Get the post comments"
+                        className="text-decoration-none"
+                        to={`/posts/posts-list`}
+                      >
+                        Get All Posts
+                      </Link>
+                      <div className="d-flex column-gap-2">
+                        {isAuthenticated &&
+                          currentUser?._id === getSinglePostRecord?.user._id &&
+                          image && (
+                            <Button
+                              aria-busy={updatePostImageStatus === "pending"}
+                              disabled={updatePostImageStatus === "pending"}
+                              onClick={saveImage}
+                            >
+                              {updatePostImageStatus === "pending" ? (
+                                <>
+                                  <Spinner
+                                    aria-label="Update user profile"
+                                    animation="border"
+                                    role="status"
+                                    size="sm"
+                                  />{" "}
+                                  Saving...
+                                </>
+                              ) : (
+                                "Save"
+                              )}
+                            </Button>
+                          )}
+                        {isAuthenticated &&
+                          currentUser?._id ===
+                            getSinglePostRecord?.user._id && (
+                            <Button
+                              aria-busy={deletePostStatus === "pending"}
+                              disabled={deletePostStatus === "pending"}
+                              onClick={deleteSinglePost}
+                            >
+                              {deletePostStatus === "pending" ? (
+                                <>
+                                  <Spinner
+                                    aria-label="Delete user profile"
+                                    animation="border"
+                                    role="status"
+                                    size="sm"
+                                  />{" "}
+                                  Removing post...
+                                </>
+                              ) : (
+                                "Delete"
+                              )}
+                            </Button>
+                          )}
+                      </div>
+                    </div>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            </Row>
+          </Loading>
+        </Container>
+      </section>
+    </>
   );
 };
 

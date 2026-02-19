@@ -1,3 +1,7 @@
+/**
+ * @file src/components/common/grid-list/index.tsx
+ */
+
 import { LottieHandler } from "@/components/feedback";
 import { Col, Row } from "react-bootstrap";
 

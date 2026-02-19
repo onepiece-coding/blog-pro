@@ -1,3 +1,7 @@
+/**
+ * @file src/store/posts/posts-slice.ts
+ */
+
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { isString, type IComment, type IPost, type TStatus } from "@/lib/types";
 

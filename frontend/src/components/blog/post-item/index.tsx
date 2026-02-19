@@ -1,3 +1,7 @@
+/**
+ * @file src/components/blog/post-item/index.tsx
+ */
+
 import { Button, Card } from "react-bootstrap";
 import type { IPost } from "@/lib/types";
 import { Link } from "react-router-dom";

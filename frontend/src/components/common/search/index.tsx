@@ -1,3 +1,7 @@
+/**
+ * @file src/components/common/search/index.tsx
+ */
+
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, Button } from "react-bootstrap";

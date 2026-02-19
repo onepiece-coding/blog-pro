@@ -1,14 +1,16 @@
+/**
+ * @file src/pages/posts/create-post/index.tsx
+ */
+
 import { createPostSchema, type TCreatePostSchema } from "@/validations";
+import { clearPostsError, createPost } from "@/store/posts/posts-slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { clearPostsError } from "@/store/posts/posts-slice";
-import { createPost } from "@/store/posts/posts-slice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategorySelect } from "@/components/blog";
 import { useNavigate } from "react-router-dom";
 import { FormField } from "@/components/forms";
 import { Heading } from "@/components/common";
-import { useDocumentTitle } from "@/hooks";
 import { Link } from "react-router-dom";
 import {
   selectCreatePostError,
@@ -30,8 +32,6 @@ import { addToast } from "@/store/toasts/toasts-slice";
 const FORM_ID = "create-post-user-form";
 
 const CreatePost = () => {
-  useDocumentTitle("Blog Pro - Create Post");
-
   const status = useAppSelector(selectCreatePostStatus);
   const error = useAppSelector(selectCreatePostError);
 
@@ -86,104 +86,108 @@ const CreatePost = () => {
   }, [dispatch]);
 
   return (
-    <section
-      className="my-3"
-      aria-labelledby="create-post-heading"
-      role="region"
-    >
-      <Container>
-        <Row>
-          <Col lg={{ span: "8", offset: "2" }}>
-            <Card className="viewport-card">
-              <Card.Header>
-                <Heading id="create-post-heading" title="Create New Post" />
-              </Card.Header>
+    <>
+      <title>Blog Pro - Create Post</title>
 
-              <Card.Body>
-                {error && (
-                  <Alert
-                    className="text-center"
-                    aria-live="assertive"
-                    variant="danger"
-                    role="alert"
+      <section
+        className="my-3"
+        aria-labelledby="create-post-heading"
+        role="region"
+      >
+        <Container>
+          <Row>
+            <Col lg={{ span: "8", offset: "2" }}>
+              <Card className="viewport-card">
+                <Card.Header>
+                  <Heading id="create-post-heading" title="Create New Post" />
+                </Card.Header>
+
+                <Card.Body>
+                  {error && (
+                    <Alert
+                      className="text-center"
+                      aria-live="assertive"
+                      variant="danger"
+                      role="alert"
+                    >
+                      {error}
+                    </Alert>
+                  )}
+
+                  <Form
+                    onSubmit={createPostForm.handleSubmit(onSubmit)}
+                    aria-labelledby="create-post-heading"
+                    id={FORM_ID}
+                    noValidate
                   >
-                    {error}
-                  </Alert>
-                )}
+                    <CategorySelect
+                      form={createPostForm}
+                      name="categoryId"
+                      formId={FORM_ID}
+                    />
 
-                <Form
-                  onSubmit={createPostForm.handleSubmit(onSubmit)}
-                  aria-labelledby="create-post-heading"
-                  id={FORM_ID}
-                  noValidate
-                >
-                  <CategorySelect
-                    form={createPostForm}
-                    name="categoryId"
-                    formId={FORM_ID}
-                  />
+                    <FormField
+                      control={createPostForm.control}
+                      label="Post Image"
+                      formId={FORM_ID}
+                      name="image"
+                      type="file"
+                    />
 
-                  <FormField
-                    control={createPostForm.control}
-                    label="Post Image"
-                    formId={FORM_ID}
-                    name="image"
-                    type="file"
-                  />
+                    <FormField
+                      placeholder="Choose a post title"
+                      control={createPostForm.control}
+                      label="Post Title"
+                      formId={FORM_ID}
+                      name="title"
+                    />
 
-                  <FormField
-                    placeholder="Choose a post title"
-                    control={createPostForm.control}
-                    label="Post Title"
-                    formId={FORM_ID}
-                    name="title"
-                  />
+                    <FormField
+                      placeholder="Choose a post description"
+                      control={createPostForm.control}
+                      label="Post Description"
+                      name="description"
+                      formId={FORM_ID}
+                      as="textarea"
+                    />
 
-                  <FormField
-                    placeholder="Choose a post description"
-                    control={createPostForm.control}
-                    label="Post Description"
-                    name="description"
-                    formId={FORM_ID}
-                    as="textarea"
-                  />
+                    <Button
+                      aria-busy={status === "pending"}
+                      disabled={status === "pending"}
+                      type="submit"
+                    >
+                      {status === "pending" ? (
+                        <>
+                          <Spinner
+                            aria-label="Creating post"
+                            animation="border"
+                            role="status"
+                            size="sm"
+                          />{" "}
+                          Creating post...
+                        </>
+                      ) : (
+                        "Create Post"
+                      )}
+                    </Button>
+                  </Form>
+                </Card.Body>
 
-                  <Button
-                    aria-busy={status === "pending"}
-                    disabled={status === "pending"}
-                    type="submit"
+                <Card.Footer>
+                  <Link
+                    className="text-decoration-none"
+                    aria-label="Go back to posts page"
+                    to="/posts/posts-list"
                   >
-                    {status === "pending" ? (
-                      <>
-                        <Spinner
-                          aria-label="Creating post"
-                          animation="border"
-                          role="status"
-                          size="sm"
-                        />{" "}
-                        Creating post...
-                      </>
-                    ) : (
-                      "Create Post"
-                    )}
-                  </Button>
-                </Form>
-              </Card.Body>
-
-              <Card.Footer>
-                <Link
-                  className="text-decoration-none"
-                  aria-label="Go back to posts page"
-                  to="/posts/posts-list"
-                >
-                  Go back to posts page?
-                </Link>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+                    Go back to posts page?
+                  </Link>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </>
   );
 };
 

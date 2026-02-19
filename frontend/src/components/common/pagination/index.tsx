@@ -1,3 +1,7 @@
+/**
+ * @file src/components/common/pagination/index.tsx
+ */
+
 import type { CSSProperties } from "react";
 import { Button } from "react-bootstrap";
 

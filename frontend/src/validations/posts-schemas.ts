@@ -1,3 +1,7 @@
+/**
+ * @file src/validations/posts-schemas.ts
+ */
+
 import z from "zod";
 
 const MAX_FILE_SIZE = 1000000; // 1MB
