@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /**
  * @file src/test-utils/index.tsx
  *
@@ -9,7 +11,9 @@
  *  • makeAuthState        — build a partial auth slice state (safe defaults)
  *  • makeToastsState      — build a partial toasts slice state (safe defaults)
  *  • makePasswordState    — build a partial password slice state (safe defaults)
- *  • buildStore           — create a real Redux store with all three slices
+ *  • makePostsState       — build a partial posts slice state (safe defaults)
+ *  • makeCategoriesState  — build a partial categories slice state (safe defaults)
+ *  • buildStore           — create a real Redux store with all 5 slices
  *
  *  RENDER HELPERS
  *  • renderWithProviders  — render inside <Provider> + <MemoryRouter>
@@ -22,6 +26,8 @@
  *  • regularUser          — standard non-admin user (alice)
  *  • adminUser            — standard admin user (bob)
  *  • makeToast()          — factory for fully type-compliant IToast objects
+ *  • makePost()           — factory for post objects
+ *  • makeCategory()       — factory for category objects
  *
  *  FORM HELPERS
  *  • fillForm()           — fill multiple RHF-controlled fields by label
@@ -32,7 +38,7 @@
  *     configureStore with preloadedState keeps selectors honest.
  *     A broken selector breaks the test — that's the desired behaviour.
  *
- *  2. Auth, toasts, and password are registered by default.
+ *  2. Auth, toasts, password, posts, and categories are registered by default.
  *     Any component in the tree that reads from these slices works without
  *     extra configuration. extraReducers handles future slices.
  *
@@ -44,19 +50,22 @@
  *     TypeScript surfaces any future interface changes at compile time.
  */
 
-import { configureStore, type Reducer } from "@reduxjs/toolkit";
-import type { IToast, IUser } from "@/lib/types";
-import { MemoryRouter } from "react-router-dom";
-import type { RootState } from "@/store";
-import { Provider } from "react-redux";
+import React from "react";
 import {
   render,
   type RenderOptions as RTLRenderOptions,
 } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { configureStore, type Reducer } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
 
-import passwordReducer from "@/store/password/password-slice";
+import categoriesReducer from "@/store/categories/categories-slice";
 import toastsReducer from "@/store/toasts/toasts-slice";
+import passwordReducer from "@/store/password/password-slice";
+import postsReducer from "@/store/posts/posts-slice";
 import authReducer from "@/store/auth/auth-slice";
+import type { RootState } from "@/store";
+import type { IToast, IUser } from "@/lib/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TYPES
@@ -64,15 +73,17 @@ import authReducer from "@/store/auth/auth-slice";
 
 /**
  * Partial preloaded state accepted by buildStore.
- * Both auth, toasts, and password are registered by default — extend as needed.
+ * Auth, toasts, password, posts, and categories are registered by default.
  */
 export interface PreloadedTestState {
   auth?: Partial<RootState["auth"]>;
   toasts?: Partial<RootState["toasts"]>;
   password?: Partial<RootState["password"]>;
-  // Add more slices here as the project grows:
-  // posts?: Partial<RootState["posts"]>;
+  posts?: Partial<RootState["posts"]>;
+  categories?: Partial<RootState["categories"]>;
+  // Add more slices as needed:
   // users?: Partial<RootState["users"]>;
+  // comments?: Partial<RootState["comments"]>;
 }
 
 /**
@@ -170,13 +181,76 @@ export const makePasswordState = (
 });
 
 /**
+ * Build a fully-typed posts slice state with safe defaults.
+ *
+ * @example
+ * makePostsState({ operations: { createPost: "pending" } })
+ * makePostsState({ records: [mockPost] })
+ * makePostsState({ record: mockPost })
+ */
+export const makePostsState = (
+  overrides: Partial<RootState["posts"]> = {},
+): RootState["posts"] => ({
+  operations: {
+    getPostComments: "idle",
+    updatePostImage: "idle",
+    getSinglePost: "idle",
+    updatePost: "idle",
+    createPost: "idle",
+    deletePost: null,
+    toggleLike: "idle",
+    getPosts: "idle",
+  },
+  errors: {
+    getPostComments: null,
+    updatePostImage: null,
+    getSinglePost: null,
+    updatePost: null,
+    createPost: null,
+    deletePost: null,
+    toggleLike: null,
+    getPosts: null,
+  },
+  totalPages: 0,
+  records: [],
+  record: null,
+  postComments: [],
+  ...overrides,
+});
+
+/**
+ * Build a fully-typed categories slice state with safe defaults.
+ *
+ * @example
+ * makeCategoriesState({ records: [mockCategory] })
+ * makeCategoriesState({ operations: { getAllCategories: "pending" } })
+ */
+export const makeCategoriesState = (
+  overrides: Partial<RootState["categories"]> = {},
+): RootState["categories"] => ({
+  operations: {
+    getAllCategories: "idle",
+    createCategory: "idle",
+    deleteCategory: null,
+  },
+  errors: {
+    getAllCategories: null,
+    createCategory: null,
+    deleteCategory: null,
+  },
+  totalPages: 0,
+  records: [],
+  ...overrides,
+});
+
+/**
  * Create a real Redux store pre-loaded with test state.
- * Registers auth, toasts, and password by default — all are ubiquitous.
+ * Registers auth, toasts, password, posts, and categories by default.
  *
  * @example
  * const store = buildStore({ auth: { user: regularUser } });
- * const store = buildStore({ toasts: { records: [mockToast] } });
- * const store = buildStore({ password: { operations: { resetPassword: "pending" } } });
+ * const store = buildStore({ posts: { records: [mockPost] } });
+ * const store = buildStore({ categories: { records: [mockCategory] } });
  */
 export const buildStore = (
   preloadedState: PreloadedTestState = {},
@@ -186,6 +260,8 @@ export const buildStore = (
     auth: authOverrides = {},
     toasts: toastsOverrides = {},
     password: passwordOverrides = {},
+    posts: postsOverrides = {},
+    categories: categoriesOverrides = {},
     ...otherSlices
   } = preloadedState;
 
@@ -194,12 +270,16 @@ export const buildStore = (
       auth: authReducer,
       toasts: toastsReducer,
       password: passwordReducer,
+      posts: postsReducer,
+      categories: categoriesReducer,
       ...extraReducers,
     },
     preloadedState: {
       auth: makeAuthState(authOverrides),
       toasts: makeToastsState(toastsOverrides),
       password: makePasswordState(passwordOverrides),
+      posts: makePostsState(postsOverrides),
+      categories: makeCategoriesState(categoriesOverrides),
       ...Object.fromEntries(
         Object.entries(otherSlices).filter(([key]) => key in extraReducers),
       ),
@@ -341,6 +421,36 @@ export const makeToast = (overrides: Partial<IToast> = {}): IToast => ({
   type: "primary",
   title: null,
   message: "Test notification message",
+  ...overrides,
+});
+
+/**
+ * Create a mock post fixture for testing.
+ *
+ * @example
+ * makePost({ title: "My Post", user: makeUser() })
+ */
+export const makePost = (overrides: Partial<any> = {}): any => ({
+  _id: "post-test-123",
+  title: "Test Post Title",
+  description: "Test post description content",
+  image: { url: "https://example.com/post.jpg", publicId: "post-img-123" },
+  user: makeUser(),
+  categoryId: { _id: "cat-123", title: "Technology" },
+  likes: [],
+  createdAt: new Date().toISOString(),
+  ...overrides,
+});
+
+/**
+ * Create a mock category fixture for testing.
+ *
+ * @example
+ * makeCategory({ title: "Sports" })
+ */
+export const makeCategory = (overrides: Partial<any> = {}): any => ({
+  _id: "cat-test-123",
+  title: "Test Category",
   ...overrides,
 });
 

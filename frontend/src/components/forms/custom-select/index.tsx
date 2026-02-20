@@ -139,6 +139,7 @@ const CustomSelect = <
               </div>
               {isOpen && (
                 <div
+                  // onMouseDown prevents default blur
                   onMouseDown={(e) => e.preventDefault()}
                   className={optionsMenu}
                   onScroll={handleScroll}
@@ -157,7 +158,11 @@ const CustomSelect = <
                     ))}
 
                     {status === "pending" && (
-                      <li className="text-center" aria-live="polite">
+                      <li
+                        className="text-center"
+                        aria-live="polite"
+                        role="status"
+                      >
                         <Spinner animation="border" size="sm" />
                       </li>
                     )}

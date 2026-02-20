@@ -8,6 +8,7 @@ import { Col, Row } from "react-bootstrap";
 type HasID = { _id?: string };
 
 interface GridListProps<T extends HasID> {
+  // T extends HasID => T must have _id
   records: T[];
   renderItem: (record: T) => React.ReactNode;
 }

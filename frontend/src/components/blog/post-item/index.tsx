@@ -14,7 +14,12 @@ const { cardImage, clampText, clampTitle1Line, clampDescription3Lines } =
 const PostItem = ({ _id, image, title, description }: IPost) => {
   return (
     <Card>
-      <Card.Img variant="top" src={image.url} className={cardImage} />
+      <Card.Img
+        variant="top"
+        src={image.url}
+        alt={title}
+        className={cardImage}
+      />
       <Card.Body>
         <Card.Title title={title} className={`${clampText} ${clampTitle1Line}`}>
           {title}
