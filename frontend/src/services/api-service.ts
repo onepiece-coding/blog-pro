@@ -6,8 +6,13 @@ import axios, { type InternalAxiosRequestConfig } from "axios";
 import { logout } from "@/store/auth/auth-slice";
 import { TokenService } from "./auth-service";
 
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:8000/api/v1"
+    : "/api/v1";
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: BASE_URL,
 });
 
 // Request interceptor: Attach access token
