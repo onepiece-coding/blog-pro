@@ -136,7 +136,7 @@ const Comments = () => {
 
   return (
     <>
-      <title>Blog Pro - Post Comments</title>
+      <title>OP-Blog - Post Comments</title>
 
       <section
         aria-labelledby="comments-heading"

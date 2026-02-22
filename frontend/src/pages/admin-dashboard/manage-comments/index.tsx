@@ -2,13 +2,9 @@
  * @file src/pages/admin-dashboard/manage-comments/index.tsx
  */
 
-import {
-  commentsCleanUp,
-  deleteComment,
-  getAllComments,
-} from "@/store/comments/comments-slice";
-import { Alert, Button, Spinner, Table } from "react-bootstrap";
+import { Alert, Button, Modal, Spinner, Table } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addToast } from "@/store/toasts/toasts-slice";
 import { Pagination } from "@/components/common";
 import { Loading } from "@/components/feedback";
 import {
@@ -19,15 +15,20 @@ import {
   selectGetAllCommentsTotalPages,
 } from "@/store/comments/comments-selectors";
 import { useEffect, useState } from "react";
+import {
+  commentsCleanUp,
+  deleteComment,
+  getAllComments,
+} from "@/store/comments/comments-slice";
 import { Link } from "react-router-dom";
 
 import TrashIcon from "@/assets/svg/trash.svg?react";
-import { addToast } from "@/store/toasts/toasts-slice";
 
 const ManageComments = () => {
-  const [pageNumber, setPageNumber] = useState(1);
-
   const [isDeleting, setIsDeleting] = useState<null | string>(null);
+  const [commentId, setCommentId] = useState<null | string>(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [show, setShow] = useState(false);
 
   const deleteCommentError = useAppSelector(selectDeleteCommentError);
 
@@ -40,37 +41,35 @@ const ManageComments = () => {
 
   const dispatch = useAppDispatch();
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const handlePageChange = (newPage: number) => {
     setPageNumber(newPage);
   };
 
-  const deleteCommentHandler = async (commentId: string) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this account?",
-    );
+  const deleteCommentHandler = async (commentId: string | null) => {
+    if (!commentId) return;
+    setIsDeleting(commentId);
+    try {
+      await dispatch(deleteComment(commentId)).unwrap();
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Comment has been deleted",
+        }),
+      );
 
-    if (confirm) {
-      setIsDeleting(commentId);
-      try {
-        await dispatch(deleteComment(commentId)).unwrap();
-        dispatch(
-          addToast({
-            type: "success",
-            message: "Comment has been deleted",
-          }),
-        );
-
-        setIsDeleting(null);
-
-        if (pageNumber > 1 && getAllCommentsRecords.length === 1) {
-          setPageNumber(pageNumber - 1);
-        }
-      } catch (error) {
-        setIsDeleting(null);
-        if (import.meta.env.MODE === "development") {
-          console.error("Delete comment failed:", error);
-        }
+      if (pageNumber > 1 && getAllCommentsRecords.length === 1) {
+        setPageNumber(pageNumber - 1);
       }
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Delete comment failed:", error);
+      }
+    } finally {
+      setIsDeleting(null);
+      handleClose();
     }
   };
 
@@ -85,6 +84,38 @@ const ManageComments = () => {
   return (
     <>
       <title>Admin Dashboard | Manage Comments</title>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Comment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this comment?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => deleteCommentHandler(commentId)}
+            aria-busy={isDeleting === commentId}
+            disabled={isDeleting === commentId}
+            variant="danger"
+          >
+            {isDeleting === commentId ? (
+              <>
+                <Spinner
+                  aria-label="Delete comment"
+                  animation="border"
+                  role="status"
+                  size="sm"
+                />{" "}
+                Removing comment...
+              </>
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Loading status={getAllCommentsStatus} error={getAllCommentsError}>
         <div className="d-flex flex-column row-gap-3">
@@ -141,21 +172,14 @@ const ManageComments = () => {
                       </td>
                       <td>
                         <Button
-                          onClick={() => deleteCommentHandler(comment._id)}
-                          disabled={isDeleting === comment._id}
+                          onClick={() => {
+                            setCommentId(comment._id);
+                            handleShow();
+                          }}
                           variant="danger"
                           size="sm"
                         >
-                          {isDeleting === comment._id ? (
-                            <Spinner
-                              aria-label="Delete comment"
-                              animation="border"
-                              role="status"
-                              size="sm"
-                            />
-                          ) : (
-                            <TrashIcon width={16} height={16} />
-                          )}
+                          <TrashIcon width={16} height={16} />
                         </Button>
                       </td>
                     </tr>

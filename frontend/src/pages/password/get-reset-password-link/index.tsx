@@ -50,7 +50,7 @@ const GetResetPasswordLink = () => {
 
   return (
     <>
-      <title>Blog Pro - Get The Password Reset Link</title>
+      <title>OP-Blog - Get The Password Reset Link</title>
 
       <section
         className={"d-flex align-items-center h-100"}

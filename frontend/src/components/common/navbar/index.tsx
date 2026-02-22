@@ -10,7 +10,7 @@ interface NavbarProps {
   children: React.ReactNode;
 }
 
-const Navbar = ({ brandText = "Blog Pro", children }: NavbarProps) => {
+const Navbar = ({ brandText = "OP-Blog", children }: NavbarProps) => {
   return (
     <BsNavbar
       className={`bg-body-tertiary`}
@@ -23,7 +23,7 @@ const Navbar = ({ brandText = "Blog Pro", children }: NavbarProps) => {
         <BsNavbar.Brand
           as={Link}
           to={"/"}
-          aria-label="Navigate to Blog Pro homepage"
+          aria-label="Navigate to OP-Blog homepage"
         >
           {brandText}
         </BsNavbar.Brand>

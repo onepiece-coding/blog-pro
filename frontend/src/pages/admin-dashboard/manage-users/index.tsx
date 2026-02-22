@@ -9,7 +9,7 @@ import {
 } from "@/store/users/users-slice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Pagination, Search } from "@/components/common";
-import { Alert, Button, Spinner, Table } from "react-bootstrap";
+import { Alert, Button, Modal, Spinner, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import {
   selectDeleteUserProfileError,
@@ -27,8 +27,10 @@ import { Loading } from "@/components/feedback";
 import { addToast } from "@/store/toasts/toasts-slice";
 
 const ManageUsers = () => {
+  const [userId, setUserId] = useState<null | string>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [username, setUserName] = useState("");
+  const [show, setShow] = useState(false);
 
   const deleteUserProfileStatus = useAppSelector(selectDeleteUserProfileStatus);
   const deleteUserProfileError = useAppSelector(selectDeleteUserProfileError);
@@ -40,6 +42,9 @@ const ManageUsers = () => {
 
   const dispatch = useAppDispatch();
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const handlePageChange = (newPage: number) => {
     setPageNumber(newPage);
   };
@@ -49,30 +54,28 @@ const ManageUsers = () => {
     setUserName(username);
   };
 
-  const deleteUserHandler = async (userId: string) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this account?",
-    );
+  const deleteUserHandler = async (userId: string | null) => {
+    if (!userId) return;
 
-    if (confirm) {
-      try {
-        await dispatch(deleteUserProfile(userId)).unwrap();
+    try {
+      await dispatch(deleteUserProfile(userId)).unwrap();
 
-        dispatch(
-          addToast({
-            type: "success",
-            message: "User profile has been deleted",
-          }),
-        );
+      dispatch(
+        addToast({
+          type: "success",
+          message: "User profile has been deleted",
+        }),
+      );
 
-        if (pageNumber > 1 && getAllUsersRecords.length === 1) {
-          setPageNumber(pageNumber - 1);
-        }
-      } catch (error) {
-        if (import.meta.env.MODE === "development") {
-          console.error("Delete user profile failed:", error);
-        }
+      if (pageNumber > 1 && getAllUsersRecords.length === 1) {
+        setPageNumber(pageNumber - 1);
       }
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Delete user profile failed:", error);
+      }
+    } finally {
+      handleClose();
     }
   };
 
@@ -87,6 +90,37 @@ const ManageUsers = () => {
   return (
     <>
       <title>Admin Dashboard | Manage Users</title>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this account?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            disabled={deleteUserProfileStatus === userId}
+            onClick={() => deleteUserHandler(userId)}
+            variant="danger"
+          >
+            {deleteUserProfileStatus === userId ? (
+              <>
+                <Spinner
+                  aria-label="Delete user"
+                  animation="border"
+                  role="status"
+                  size="sm"
+                />{" "}
+                Removing user...
+              </>
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Loading status={getAllUsersStatus} error={getAllUsersError}>
         <div className="d-flex flex-column row-gap-3">
@@ -147,21 +181,14 @@ const ManageUsers = () => {
                             </Button>
                           </Link>
                           <Button
-                            disabled={deleteUserProfileStatus === user._id}
-                            onClick={() => deleteUserHandler(user._id)}
+                            onClick={() => {
+                              setUserId(user._id);
+                              handleShow();
+                            }}
                             variant="danger"
                             size="sm"
                           >
-                            {deleteUserProfileStatus === user._id ? (
-                              <Spinner
-                                aria-label="Delete user profile"
-                                animation="border"
-                                role="status"
-                                size="sm"
-                              />
-                            ) : (
-                              <TrashIcon width={16} height={16} />
-                            )}
+                            <TrashIcon width={16} height={16} />
                           </Button>
                         </div>
                       </td>

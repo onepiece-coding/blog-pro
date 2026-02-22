@@ -4,6 +4,7 @@ import {
   getAllCommentsCtrl,
   deleteCommentCtrl,
   updateCommentCtrl,
+  getPostCommentsCtrl,
 } from '../controllers/commentsController.js';
 import validateObjectIdParam from '../middlewares/validateObjectId.js';
 import {
@@ -30,5 +31,8 @@ commentsRoutes
   .all(validateObjectIdParam('id'))
   .delete(verifyToken, deleteCommentCtrl)
   .patch(verifyToken, validate(validateUpdateComment), updateCommentCtrl);
+
+// /api/v1/comments/post/:postId
+commentsRoutes.route('/post/:postId').get(getPostCommentsCtrl);
 
 export default commentsRoutes;

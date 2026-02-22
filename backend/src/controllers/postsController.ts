@@ -306,21 +306,3 @@ export const toggleLikeCtrl = asyncHandler(
     res.status(200).json(post);
   },
 );
-
-/**------------------------------------------------
- * @route  /api/v1/post/:postId/comments
- * @desc   Get Post Comments
- * @access public
- * @method GET
----------------------------------------------------*/
-export const getPostCommentsCtrl = asyncHandler(
-  async (req: Request, res: Response) => {
-    const postComments = await Comment.find({
-      postId: req.params.postId,
-    })
-      .populate('user')
-      .sort({ createdAt: -1 });
-
-    res.status(200).json(postComments);
-  },
-);

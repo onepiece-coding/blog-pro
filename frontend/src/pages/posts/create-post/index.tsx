@@ -87,7 +87,7 @@ const CreatePost = () => {
 
   return (
     <>
-      <title>Blog Pro - Create Post</title>
+      <title>OP-Blog - Create Post</title>
 
       <section
         className="my-3"

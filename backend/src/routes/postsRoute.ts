@@ -8,7 +8,6 @@ import {
   updatePostCtrl,
   updatePostImageCtrl,
   toggleLikeCtrl,
-  getPostCommentsCtrl,
 } from '../controllers/postsController.js';
 import { singleImage } from '../middlewares/photoUpload.js';
 import {
@@ -60,8 +59,5 @@ postsRoutes
 postsRoutes
   .route('/like/:id')
   .patch(validateObjectIdParam('id'), verifyToken, toggleLikeCtrl);
-
-// /api/v1/post/:postId/comments
-postsRoutes.route('/:postId/comments').get(getPostCommentsCtrl);
 
 export default postsRoutes;

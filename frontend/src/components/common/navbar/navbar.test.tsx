@@ -17,7 +17,7 @@ describe("Navbar — shell component", () => {
   // ── Rendering ────────────────────────────────────────────────────────────
 
   describe("🧱 Rendering", () => {
-    it("renders the default brand text 'Blog Pro' when no brandText prop is supplied", () => {
+    it("renders the default brand text 'OP-Blog' when no brandText prop is supplied", () => {
       renderWithProviders(
         <Navbar>
           <span>child</span>
@@ -25,8 +25,8 @@ describe("Navbar — shell component", () => {
       );
 
       expect(
-        screen.getByRole("link", { name: /navigate to blog pro homepage/i }),
-      ).toHaveTextContent("Blog Pro");
+        screen.getByRole("link", { name: /navigate to OP-Blog homepage/i }),
+      ).toHaveTextContent("OP-Blog");
     });
 
     it("renders a custom brandText when one is supplied", () => {
@@ -37,7 +37,7 @@ describe("Navbar — shell component", () => {
       );
 
       expect(
-        screen.getByRole("link", { name: /navigate to blog pro homepage/i }),
+        screen.getByRole("link", { name: /navigate to OP-Blog homepage/i }),
       ).toHaveTextContent("My Custom Blog");
     });
 
@@ -105,7 +105,7 @@ describe("Navbar — shell component", () => {
       );
 
       expect(
-        screen.getByRole("link", { name: /navigate to blog pro homepage/i }),
+        screen.getByRole("link", { name: /navigate to OP-Blog homepage/i }),
       ).toHaveAttribute("href", "/");
     });
   });
@@ -115,8 +115,8 @@ describe("Navbar — shell component", () => {
   describe("♿ Accessibility", () => {
     it("brand link has a descriptive aria-label for screen readers", () => {
       /**
-       * 'Blog Pro' alone is a poor link description.
-       * 'Navigate to Blog Pro homepage' tells a screen-reader user exactly where they'll land.
+       * 'OP-Blog' alone is a poor link description.
+       * 'Navigate to OP-Blog homepage' tells a screen-reader user exactly where they'll land.
        */
       renderWithProviders(
         <Navbar>
@@ -125,11 +125,11 @@ describe("Navbar — shell component", () => {
       );
 
       const brandLink = screen.getByRole("link", {
-        name: /navigate to blog pro homepage/i,
+        name: /navigate to OP-Blog homepage/i,
       });
       expect(brandLink).toHaveAttribute(
         "aria-label",
-        "Navigate to Blog Pro homepage",
+        "Navigate to OP-Blog homepage",
       );
     });
 
@@ -149,7 +149,7 @@ describe("Navbar — shell component", () => {
 
       await user.tab();
       expect(
-        screen.getByRole("link", { name: /navigate to blog pro homepage/i }),
+        screen.getByRole("link", { name: /navigate to OP-Blog homepage/i }),
       ).toHaveFocus();
     });
   });
@@ -169,7 +169,7 @@ describe("Navbar — shell component", () => {
       );
 
       const brand = screen.getByRole("link", {
-        name: /navigate to blog pro homepage/i,
+        name: /navigate to OP-Blog homepage/i,
       });
       expect(brand).toBeInTheDocument();
       expect(brand).toHaveTextContent("");

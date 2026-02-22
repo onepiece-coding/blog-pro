@@ -41,7 +41,7 @@ const ErrorElement = () => {
 
   return (
     <>
-      <title>Blog Pro - Error Element</title>
+      <title>OP-Blog - Error Element</title>
 
       <section
         className={"d-flex align-items-center vh-100"}

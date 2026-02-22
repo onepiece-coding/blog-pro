@@ -2,9 +2,10 @@
  * @file src/pages/admin-dashboard/manage-categories/index.tsx
  */
 
-import { Alert, Button, Spinner, Table } from "react-bootstrap";
+import { Alert, Button, Modal, Spinner, Table } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Pagination, Search } from "@/components/common";
+import { addToast } from "@/store/toasts/toasts-slice";
 import {
   selectDeleteCategoryError,
   selectDeleteCategoryStatus,
@@ -22,11 +23,12 @@ import {
 import { useEffect, useState } from "react";
 
 import TrashIcon from "@/assets/svg/trash.svg?react";
-import { addToast } from "@/store/toasts/toasts-slice";
 
 const ManageCategories = () => {
+  const [categoryId, setCategoryId] = useState<string | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [category, setCategory] = useState("");
+  const [show, setShow] = useState(false);
 
   const deleteCategoryStatus = useAppSelector(selectDeleteCategoryStatus);
   const deleteCategoryError = useAppSelector(selectDeleteCategoryError);
@@ -40,6 +42,9 @@ const ManageCategories = () => {
 
   const dispatch = useAppDispatch();
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const handlePageChange = (newPage: number) => {
     setPageNumber(newPage);
   };
@@ -49,29 +54,26 @@ const ManageCategories = () => {
     setCategory(category);
   };
 
-  const deleteCategoryHandler = async (categoryId: string) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this category?",
-    );
+  const deleteCategoryHandler = async (categoryId: string | null) => {
+    if (!categoryId) return;
+    try {
+      await dispatch(deleteCategory(categoryId)).unwrap();
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Category has been deleted",
+        }),
+      );
 
-    if (confirm) {
-      try {
-        await dispatch(deleteCategory(categoryId)).unwrap();
-        dispatch(
-          addToast({
-            type: "success",
-            message: "Category has been deleted",
-          }),
-        );
-
-        if (pageNumber > 1 && getAllCategoriesRecords.length === 1) {
-          setPageNumber(pageNumber - 1);
-        }
-      } catch (error) {
-        if (import.meta.env.MODE === "development") {
-          console.error("Delete category failed:", error);
-        }
+      if (pageNumber > 1 && getAllCategoriesRecords.length === 1) {
+        setPageNumber(pageNumber - 1);
       }
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Delete category failed:", error);
+      }
+    } finally {
+      handleClose();
     }
   };
 
@@ -88,6 +90,37 @@ const ManageCategories = () => {
   return (
     <>
       <title>Admin Dashboard | Manage Categories</title>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this category?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => deleteCategoryHandler(categoryId)}
+            disabled={deleteCategoryStatus === categoryId}
+            variant="danger"
+          >
+            {deleteCategoryStatus === categoryId ? (
+              <>
+                <Spinner
+                  aria-label="Delete category"
+                  animation="border"
+                  role="status"
+                  size="sm"
+                />{" "}
+                Removing category...
+              </>
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Loading status={getAllCategoriesStatus} error={getAllCategoriesError}>
         <div className="d-flex flex-column row-gap-3">
@@ -130,21 +163,14 @@ const ManageCategories = () => {
                       <td>{category.title}</td>
                       <td>
                         <Button
-                          onClick={() => deleteCategoryHandler(category._id)}
-                          disabled={deleteCategoryStatus === category._id}
+                          onClick={() => {
+                            setCategoryId(category._id);
+                            handleShow();
+                          }}
                           variant="danger"
                           size="sm"
                         >
-                          {deleteCategoryStatus === category._id ? (
-                            <Spinner
-                              aria-label="Delete category"
-                              animation="border"
-                              role="status"
-                              size="sm"
-                            />
-                          ) : (
-                            <TrashIcon width={16} height={16} />
-                          )}
+                          <TrashIcon width={16} height={16} />
                         </Button>
                       </td>
                     </tr>

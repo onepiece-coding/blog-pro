@@ -63,7 +63,7 @@ const PostsList = () => {
 
   return (
     <>
-      <title>Blog Pro - Posts List</title>
+      <title>OP-Blog - Posts List</title>
 
       <section
         className="my-3"

@@ -32,21 +32,20 @@ if (typeof trustProxy !== 'undefined') {
 const allowedOrigin = env.CLIENT_DOMAIN || '*';
 
 // Security Middlewares
-// We need to explicitly tell Helmet that res.cloudinary.com is a trusted source for images.
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "data:", "res.cloudinary.com", "cdn.pixabay.com"],
-        "connect-src": ["'self'", "res.cloudinary.com", "cdn.pixabay.com"],
+        'img-src': ["'self'", 'data:', 'res.cloudinary.com', 'cdn.pixabay.com'],
+        'connect-src': ["'self'", 'res.cloudinary.com', 'cdn.pixabay.com'],
       },
     },
-  })
+  }),
 );
 app.use(hpp());
-// We only need CORS in the development because we have two different domains.
-if (process.env.NODE_ENV === "development") {
+
+if (process.env.NODE_ENV !== 'production') {
   app.use(
     cors({
       origin: allowedOrigin,
@@ -71,13 +70,10 @@ app.use(cookieParser(env.COOKIE_SECRET ?? undefined));
 // Routes
 app.use('/api/v1', rootRouter);
 
-// We don't need CORS in the production because we have only one domain.
 if (process.env.NODE_ENV === 'production') {
-  // To serve our optimized react app
-  // We should make express serve static files (html, css, js, ...)
+  // Express serve static files (html, css, js, ...)
   app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-  // Express 5: Use "*path" instead of "*" or "(.*)"
   app.get('*path', (_req, res) => {
     res.sendFile(path.resolve(__dirname, '../frontend/dist/index.html'));
   });

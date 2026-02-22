@@ -2,7 +2,7 @@
  * @file src/components/blog/post-item/index.tsx
  */
 
-import { Button, Card } from "react-bootstrap";
+import { Badge, Button, Card } from "react-bootstrap";
 import type { IPost } from "@/lib/types";
 import { Link } from "react-router-dom";
 
@@ -11,15 +11,13 @@ import styles from "./styles.module.css";
 const { cardImage, clampText, clampTitle1Line, clampDescription3Lines } =
   styles;
 
-const PostItem = ({ _id, image, title, description }: IPost) => {
+const PostItem = ({ _id, image, title, description, categoryId }: IPost) => {
   return (
     <Card>
-      <Card.Img
-        variant="top"
-        src={image.url}
-        alt={title}
-        className={cardImage}
-      />
+      <div className={cardImage}>
+        <Card.Img variant="top" src={image.url} alt={title} />
+        <Badge bg="primary">{categoryId.title}</Badge>
+      </div>
       <Card.Body>
         <Card.Title title={title} className={`${clampText} ${clampTitle1Line}`}>
           {title}

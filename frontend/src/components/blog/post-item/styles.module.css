@@ -1,5 +1,15 @@
 .cardImage {
+  position: relative;
+}
+
+.cardImage img {
   height: 200px;
+}
+
+.cardImage span {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
 }
 
 .clampText {

@@ -38,6 +38,7 @@ import {
   Card,
   Col,
   Container,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -51,6 +52,7 @@ const PostDetails = () => {
 
   const [preview, setPreview] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
+  const [show, setShow] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -70,6 +72,9 @@ const PostDetails = () => {
 
   const toggleLikeStatus = useAppSelector(selectToggleLikeStatus);
   const toggleLikeError = useAppSelector(selectToggleLikeError);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const selectedFile = e.target.files?.[0];
@@ -113,25 +118,21 @@ const PostDetails = () => {
   const deleteSinglePost = async () => {
     if (!postId) return;
 
-    const confirm = window.confirm(
-      "Are you sure you want to delete this post?",
-    );
-
-    if (confirm) {
-      try {
-        await dispatch(deletePost(postId)).unwrap();
-        dispatch(
-          addToast({
-            type: "success",
-            message: "Your post has been deleted",
-          }),
-        );
-        navigate("/posts/posts-list", { replace: true });
-      } catch (error) {
-        if (import.meta.env.MODE === "development") {
-          console.error("Delete post failed:", error);
-        }
+    try {
+      await dispatch(deletePost(postId)).unwrap();
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Your post has been deleted",
+        }),
+      );
+      navigate("/posts/posts-list", { replace: true });
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Delete post failed:", error);
       }
+    } finally {
+      handleClose();
     }
   };
 
@@ -161,7 +162,38 @@ const PostDetails = () => {
 
   return (
     <>
-      <title>Blog Pro - Post Details</title>
+      <title>OP-Blog - Post Details</title>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this post?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            aria-busy={deletePostStatus === getSinglePostRecord?._id}
+            disabled={deletePostStatus === getSinglePostRecord?._id}
+            onClick={deleteSinglePost}
+            variant="danger"
+          >
+            {deletePostStatus === getSinglePostRecord?._id ? (
+              <>
+                <Spinner
+                  aria-label="Delete single post"
+                  animation="border"
+                  role="status"
+                />{" "}
+                Removing post...
+              </>
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <section
         aria-labelledby="post-details-heading"
@@ -178,17 +210,10 @@ const PostDetails = () => {
             <Row>
               <Col lg={{ span: "8", offset: "2" }}>
                 <Card className="viewport-card">
-                  <Card.Header>
-                    <div className="d-flex gap-2 justify-content-between align-items-center">
-                      <Link
-                        aria-label="Get the post comments"
-                        className="text-decoration-none"
-                        to={`/posts/posts-list`}
-                      >
-                        Get All Posts
-                      </Link>
-                      {isAuthenticated &&
-                        currentUser?._id === getSinglePostRecord?.user._id && (
+                  {isAuthenticated &&
+                    currentUser?._id === getSinglePostRecord?.user._id && (
+                      <Card.Header>
+                        <div className="d-flex gap-2 justify-content-between align-items-center">
                           <Link
                             to={`/posts/${getSinglePostRecord?._id}/update-post`}
                             className="text-decoration-none"
@@ -201,9 +226,35 @@ const PostDetails = () => {
                           >
                             Update Post
                           </Link>
-                        )}
-                    </div>
-                  </Card.Header>
+                          <div className="d-flex column-gap-2">
+                            {image && (
+                              <Button
+                                aria-busy={updatePostImageStatus === "pending"}
+                                disabled={updatePostImageStatus === "pending"}
+                                onClick={saveImage}
+                              >
+                                {updatePostImageStatus === "pending" ? (
+                                  <>
+                                    <Spinner
+                                      aria-label="Update post image"
+                                      animation="border"
+                                      role="status"
+                                      size="sm"
+                                    />{" "}
+                                    Saving...
+                                  </>
+                                ) : (
+                                  "Save"
+                                )}
+                              </Button>
+                            )}
+                            <Button onClick={handleShow} variant="danger">
+                              Delete
+                            </Button>
+                          </div>
+                        </div>
+                      </Card.Header>
+                    )}
                   <Card.Body>
                     {updatePostImageError && (
                       <Alert
@@ -317,6 +368,13 @@ const PostDetails = () => {
                   <Card.Footer>
                     <div className="d-flex gap-2 justify-content-between align-items-center">
                       <Link
+                        aria-label="Get the post comments"
+                        className="text-decoration-none"
+                        to={`/posts/posts-list`}
+                      >
+                        Get All Posts
+                      </Link>
+                      <Link
                         to={`/posts/${getSinglePostRecord?._id}/post-comments`}
                         aria-label="Get the post comments"
                         className="text-decoration-none"
@@ -324,54 +382,6 @@ const PostDetails = () => {
                       >
                         Post Comments
                       </Link>
-                      <div className="d-flex column-gap-2">
-                        {isAuthenticated &&
-                          currentUser?._id === getSinglePostRecord?.user._id &&
-                          image && (
-                            <Button
-                              aria-busy={updatePostImageStatus === "pending"}
-                              disabled={updatePostImageStatus === "pending"}
-                              onClick={saveImage}
-                            >
-                              {updatePostImageStatus === "pending" ? (
-                                <>
-                                  <Spinner
-                                    aria-label="Update user profile"
-                                    animation="border"
-                                    role="status"
-                                    size="sm"
-                                  />{" "}
-                                  Saving...
-                                </>
-                              ) : (
-                                "Save"
-                              )}
-                            </Button>
-                          )}
-                        {isAuthenticated &&
-                          currentUser?._id ===
-                            getSinglePostRecord?.user._id && (
-                            <Button
-                              aria-busy={deletePostStatus === "pending"}
-                              disabled={deletePostStatus === "pending"}
-                              onClick={deleteSinglePost}
-                            >
-                              {deletePostStatus === "pending" ? (
-                                <>
-                                  <Spinner
-                                    aria-label="Delete user profile"
-                                    animation="border"
-                                    role="status"
-                                    size="sm"
-                                  />{" "}
-                                  Removing post...
-                                </>
-                              ) : (
-                                "Delete"
-                              )}
-                            </Button>
-                          )}
-                      </div>
                     </div>
                   </Card.Footer>
                 </Card>

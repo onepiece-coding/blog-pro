@@ -131,3 +131,21 @@ export const updateCommentCtrl = asyncHandler(
     res.status(201).json(updatedComment);
   },
 );
+
+/**------------------------------------------------
+ * @route  /api/v1/comments/post/:postId
+ * @desc   Get Post Comments
+ * @access public
+ * @method GET
+---------------------------------------------------*/
+export const getPostCommentsCtrl = asyncHandler(
+  async (req: Request, res: Response) => {
+    const postComments = await Comment.find({
+      postId: req.params.postId,
+    })
+      .populate('user')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(postComments);
+  },
+);

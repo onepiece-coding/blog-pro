@@ -87,7 +87,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <title>Blog Pro - Reset Password</title>
+      <title>OP-Blog - Reset Password</title>
 
       <section
         aria-labelledby="reset-password-heading"

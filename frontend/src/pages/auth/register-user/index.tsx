@@ -86,7 +86,7 @@ const RegisterUser = () => {
 
   return (
     <>
-      <title>Blog Pro - Register User</title>
+      <title>OP-Blog - Register User</title>
       <section
         className="my-3"
         aria-labelledby="register-heading"

@@ -77,7 +77,7 @@ const SendResetPasswordLink = () => {
 
   return (
     <>
-      <title>Blog Pro - Send The Password Reset Link</title>
+      <title>OP-Blog - Send The Password Reset Link</title>
 
       <section
         aria-labelledby="send-reset-password-link-heading"

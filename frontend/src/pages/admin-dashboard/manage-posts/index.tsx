@@ -3,7 +3,7 @@
  */
 
 import { deletePost, getPosts, postsCleanUp } from "@/store/posts/posts-slice";
-import { Alert, Button, Spinner, Table } from "react-bootstrap";
+import { Alert, Button, Modal, Spinner, Table } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Pagination, Search } from "@/components/common";
 import { Loading } from "@/components/feedback";
@@ -24,8 +24,10 @@ import EyeIcon from "@/assets/svg/eye.svg?react";
 import { addToast } from "@/store/toasts/toasts-slice";
 
 const ManagePosts = () => {
+  const [postId, setPostId] = useState<null | string>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [category, setCategory] = useState("");
+  const [show, setShow] = useState(false);
   const [text, setText] = useState("");
 
   const deletePostStatus = useAppSelector(selectDeletePostStatus);
@@ -37,6 +39,9 @@ const ManagePosts = () => {
   const getPostsError = useAppSelector(selectGetPostsError);
 
   const dispatch = useAppDispatch();
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handlePageChange = (newPage: number) => {
     setPageNumber(newPage);
@@ -52,30 +57,28 @@ const ManagePosts = () => {
     setCategory(newCategory);
   };
 
-  const deletePostHandler = async (postId: string) => {
-    const confirm = window.confirm(
-      "Are you sure you want to delete this post?",
-    );
+  const deletePostHandler = async (postId: string | null) => {
+    if (!postId) return;
 
-    if (confirm) {
-      try {
-        await dispatch(deletePost(postId)).unwrap();
+    try {
+      await dispatch(deletePost(postId)).unwrap();
 
-        dispatch(
-          addToast({
-            type: "success",
-            message: "Post has been deleted",
-          }),
-        );
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Post has been deleted",
+        }),
+      );
 
-        if (pageNumber > 1 && getPostsRecords.length === 1) {
-          setPageNumber(pageNumber - 1);
-        }
-      } catch (error) {
-        if (import.meta.env.MODE === "development") {
-          console.error("Delete post failed:", error);
-        }
+      if (pageNumber > 1 && getPostsRecords.length === 1) {
+        setPageNumber(pageNumber - 1);
       }
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Delete post failed:", error);
+      }
+    } finally {
+      handleClose();
     }
   };
 
@@ -90,6 +93,37 @@ const ManagePosts = () => {
   return (
     <>
       <title>Admin Dashboard | Manage Posts</title>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this post?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => deletePostHandler(postId)}
+            disabled={deletePostStatus === postId}
+            variant="danger"
+          >
+            {deletePostStatus === postId ? (
+              <>
+                <Spinner
+                  aria-label="Delete post"
+                  animation="border"
+                  role="status"
+                  size="sm"
+                />{" "}
+                Removing post...
+              </>
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Loading status={getPostsStatus} error={getPostsError}>
         <div className="d-flex flex-column row-gap-3">
@@ -146,21 +180,14 @@ const ManagePosts = () => {
                             </Button>
                           </Link>
                           <Button
-                            onClick={() => deletePostHandler(post._id)}
-                            disabled={deletePostStatus === post._id}
+                            onClick={() => {
+                              setPostId(post._id);
+                              handleShow();
+                            }}
                             variant="danger"
                             size="sm"
                           >
-                            {deletePostStatus === post._id ? (
-                              <Spinner
-                                aria-label="Delete post"
-                                animation="border"
-                                role="status"
-                                size="sm"
-                              />
-                            ) : (
-                              <TrashIcon width={16} height={16} />
-                            )}
+                            <TrashIcon width={16} height={16} />
                           </Button>
                         </div>
                       </td>

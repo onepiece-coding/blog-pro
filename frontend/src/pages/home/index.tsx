@@ -20,7 +20,7 @@ const HomePage = ({
 }: HomePageProps) => {
   return (
     <>
-      <title>Blog Pro - Elevate Your Learning</title>
+      <title>OP-Blog - Elevate Your Learning</title>
       <section className={hero} aria-labelledby="hero-heading" role="region">
         <Container>
           <div className={heroContent}>

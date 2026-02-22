@@ -37,7 +37,7 @@ const EmailVerification = () => {
 
   return (
     <>
-      <title>Blog Pro - Email Verification</title>
+      <title>OP-Blog - Email Verification</title>
       <section
         className={"d-flex align-items-center h-100"}
         aria-labelledby="email-verification-heading"

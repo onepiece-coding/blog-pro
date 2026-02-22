@@ -97,7 +97,7 @@ const UpdateUserProfile = () => {
 
   return (
     <>
-      <title>Blog Pro - Update User Profile</title>
+      <title>OP-Blog - Update User Profile</title>
 
       <section
         aria-labelledby="update-user-profile-heading"

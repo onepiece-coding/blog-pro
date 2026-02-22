@@ -72,6 +72,8 @@ const UpdatePost = () => {
       if (data.description) body.description = data.description;
       if (data.categoryId) body.categoryId = data.categoryId;
 
+      console.log(body);
+
       await dispatch(updatePost({ postId, body })).unwrap();
 
       dispatch(
@@ -97,7 +99,7 @@ const UpdatePost = () => {
 
   return (
     <>
-      <title>Blog Pro - Update Post</title>
+      <title>OP-Blog - Update Post</title>
 
       <section
         aria-labelledby="update-post-heading"

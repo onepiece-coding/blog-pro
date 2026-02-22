@@ -13,7 +13,7 @@ interface FooterProps {
 
 const Footer = ({
   copyrightYear = new Date().getFullYear(),
-  companyName = "Blog Pro",
+  companyName = "OP-Blog",
 }: FooterProps) => {
   return (
     <footer className={footerContainer} role="contentinfo">

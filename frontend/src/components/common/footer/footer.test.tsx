@@ -56,10 +56,10 @@ describe("Footer", () => {
       expect(screen.getByRole("contentinfo")).toHaveTextContent(currentYear);
     });
 
-    it("renders the default company name 'Blog Pro'", () => {
+    it("renders the default company name 'OP-Blog'", () => {
       render(<Footer />);
 
-      expect(screen.getByRole("contentinfo")).toHaveTextContent("Blog Pro");
+      expect(screen.getByRole("contentinfo")).toHaveTextContent("OP-Blog");
     });
 
     it("renders the full default copyright string", () => {
@@ -72,7 +72,7 @@ describe("Footer", () => {
 
       const currentYear = new Date().getFullYear();
       expect(screen.getByRole("contentinfo")).toHaveTextContent(
-        `© ${currentYear} Blog Pro. All rights reserved.`,
+        `© ${currentYear} OP-Blog. All rights reserved.`,
       );
     });
   });
@@ -172,11 +172,11 @@ describe("Footer", () => {
        * concatenates text from child nodes, so this confirms the full
        * message reads as one continuous sentence.
        */
-      render(<Footer copyrightYear={2024} companyName="Blog Pro" />);
+      render(<Footer copyrightYear={2024} companyName="OP-Blog" />);
 
       const footer = screen.getByRole("contentinfo");
       expect(footer.textContent?.trim()).toBe(
-        "© 2024 Blog Pro. All rights reserved.",
+        "© 2024 OP-Blog. All rights reserved.",
       );
     });
   });

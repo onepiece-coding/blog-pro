@@ -13,16 +13,33 @@
 /* Target the entire document and all scrollable elements */
 html,
 body,
-* {
+*:not(.table-responsive) {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
 /* Target Chrome, Safari, and all Webkit browsers */
-*::-webkit-scrollbar {
+*::-webkit-scrollbar:not(.table-responsive) {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
+}
+
+/* The entire scrollbar */
+.table-responsive::-webkit-scrollbar {
+  width: 8px;
+  height: 6px; /* Needed for horizontal scrollbar styling */
+}
+
+/* The draggable handle */
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #c2caca;
+  border-radius: 6px;
+}
+
+/* The track (background) */
+.table-responsive::-webkit-scrollbar-track {
+  background-color: #e1e6e6;
 }
 
 body {

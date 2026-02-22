@@ -83,7 +83,7 @@ const LoginUser = () => {
 
   return (
     <>
-      <title>Blog Pro - Login User</title>
+      <title>OP-Blog - Login User</title>
       <section className="my-3" aria-labelledby="login-heading" role="region">
         <Container>
           <Row>

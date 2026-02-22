@@ -13,7 +13,7 @@ const getPostComments = createAsyncThunk(
   async (postId: string, thunk) => {
     const { signal, fulfillWithValue, rejectWithValue } = thunk;
     try {
-      const response = await api.get<IComment[]>(`/posts/${postId}/comments`, {
+      const response = await api.get<IComment[]>(`/comments/post/${postId}`, {
         signal,
       });
       return fulfillWithValue(response.data);

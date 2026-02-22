@@ -36,6 +36,7 @@ import {
   Card,
   Col,
   Container,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -50,6 +51,7 @@ const UserProfile = () => {
 
   const [preview, setPreview] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
+  const [show, setShow] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -68,6 +70,9 @@ const UserProfile = () => {
 
   const deleteUserProfileStatus = useAppSelector(selectDeleteUserProfileStatus);
   const deleteUserProfileError = useAppSelector(selectDeleteUserProfileError);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const selectedFile = e.target.files?.[0];
@@ -115,26 +120,21 @@ const UserProfile = () => {
 
   const deleteProfile = async () => {
     if (!userId) return;
-
-    const confirm = window.confirm(
-      "Are you sure you want to delete your account?",
-    );
-
-    if (confirm) {
-      try {
-        await dispatch(deleteUserProfile(userId)).unwrap();
-        dispatch(
-          addToast({
-            type: "success",
-            message: "Your profile has been deleted",
-          }),
-        );
-        handleLogout();
-      } catch (error) {
-        if (import.meta.env.MODE === "development") {
-          console.error("Delete user profile failed:", error);
-        }
+    try {
+      await dispatch(deleteUserProfile(userId)).unwrap();
+      dispatch(
+        addToast({
+          type: "success",
+          message: "Your profile has been deleted",
+        }),
+      );
+      handleLogout();
+    } catch (error) {
+      if (import.meta.env.MODE === "development") {
+        console.error("Delete user profile failed:", error);
       }
+    } finally {
+      handleClose();
     }
   };
 
@@ -151,7 +151,38 @@ const UserProfile = () => {
 
   return (
     <>
-      <title>Blog Pro - Get User Profile</title>
+      <title>OP-Blog - Get User Profile</title>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete your account?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            aria-busy={deleteUserProfileStatus === getUserProfileUser?._id}
+            disabled={deleteUserProfileStatus === getUserProfileUser?._id}
+            onClick={deleteProfile}
+            variant="danger"
+          >
+            {deleteUserProfileStatus === getUserProfileUser?._id ? (
+              <>
+                <Spinner
+                  aria-label="Delete user profile"
+                  animation="border"
+                  role="status"
+                />{" "}
+                Removing account...
+              </>
+            ) : (
+              "Delete"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <section
         className="my-3"
@@ -266,60 +297,40 @@ const UserProfile = () => {
                       >
                         User Posts
                       </Link>
-                      <div className="d-flex column-gap-2">
-                        {isAuthenticated &&
-                          currentUser?._id === getUserProfileUser?._id &&
-                          image && (
-                            <Button
-                              aria-busy={updateProfilePhotoStatus === "pending"}
-                              disabled={updateProfilePhotoStatus === "pending"}
-                              onClick={saveImage}
-                            >
-                              {updateProfilePhotoStatus === "pending" ? (
-                                <>
-                                  <Spinner
-                                    aria-label="Update user profile"
-                                    animation="border"
-                                    role="status"
-                                    size="sm"
-                                  />{" "}
-                                  Saving...
-                                </>
-                              ) : (
-                                "Save"
-                              )}
+                      {isAuthenticated &&
+                        currentUser?._id === getUserProfileUser?._id && (
+                          <div className="d-flex column-gap-2">
+                            {image && (
+                              <Button
+                                aria-busy={
+                                  updateProfilePhotoStatus === "pending"
+                                }
+                                disabled={
+                                  updateProfilePhotoStatus === "pending"
+                                }
+                                onClick={saveImage}
+                              >
+                                {updateProfilePhotoStatus === "pending" ? (
+                                  <>
+                                    <Spinner
+                                      aria-label="Update user profile"
+                                      animation="border"
+                                      role="status"
+                                      size="sm"
+                                    />{" "}
+                                    Saving...
+                                  </>
+                                ) : (
+                                  "Save"
+                                )}
+                              </Button>
+                            )}
+
+                            <Button onClick={handleShow} variant="danger">
+                              Delete
                             </Button>
-                          )}
-                        {isAuthenticated &&
-                          currentUser?._id === getUserProfileUser?._id && (
-                            <Button
-                              aria-busy={
-                                deleteUserProfileStatus ===
-                                getUserProfileUser?._id
-                              }
-                              disabled={
-                                deleteUserProfileStatus ===
-                                getUserProfileUser?._id
-                              }
-                              onClick={deleteProfile}
-                            >
-                              {deleteUserProfileStatus ===
-                              getUserProfileUser?._id ? (
-                                <>
-                                  <Spinner
-                                    aria-label="Delete user profile"
-                                    animation="border"
-                                    role="status"
-                                    size="sm"
-                                  />{" "}
-                                  Removing account...
-                                </>
-                              ) : (
-                                "Delete"
-                              )}
-                            </Button>
-                          )}
-                      </div>
+                          </div>
+                        )}
                     </div>
                   </Card.Footer>
                 </Card>
