@@ -14,7 +14,7 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 - **Frontend (Lahcen Alhiane):** React, Redux Toolkit, TypeScript, Bootstrap, CSS Modules.
 
-- **Backend (Mohammed BouDreya):** Node.js, Express, MongoDB, Cloudinary (for media), JWT.
+- **Backend (BouDerya MohaMed):** Node.js, Express, MongoDB, Cloudinary (for media), JWT.
 
 ## ✨ Key Features
 
