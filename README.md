@@ -1,8 +1,6 @@
 # ✍️ OnePiece Blog | Full-Stack Content Ecosystem
 
-[![Team](https://img.shields.io/badge/Team-OnePiece_Coding-blueviolet?style=for-the-badge)](https://github.com/blog-pro)
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+![Full-Stack Blog Ecosystem & CMS (React, TypeScript, Node.js)](https://github.com/onepiece-coding/blog-pro/blob/main/thumbnail.png)
 
 A robust, production-ready Blog Platform designed for high-performance content delivery and seamless administration. 
 This project isn't just a dashboard; it’s a complete ecosystem including a public-facing blog, user profile management, and a powerful administrative suite.
