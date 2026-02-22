@@ -48,4 +48,14 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 ---
 
+## 👥 Contact
+
+✅ Developed with ♥ by **OnePiece Coding** | Self Taught Software Engineers | BouDerya MohaMed | Lahcen Alhiane
+
+👉 GitHub: [https://github.com/onepiece-coding](https://github.com/onepiece-coding)
+
+👉 LinkedIn: [https://www.linkedin.com/in/lahcen-alhiane-61217239a/](https://www.linkedin.com/in/lahcen-alhiane-61217239a/)
+
+---
+
 *Looking for a specialized duo to build your next MVP or enterprise platform? We are available for freelance!*
