@@ -44,7 +44,7 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 - **Lahcen Alhiane (Frontend Lead):** Focused on UX fluidity, performance-driven state management, and responsive architecture.
 
-- **Mohammed BouDreya (Backend Lead):** Architect of the secure REST API, database schemas, and media processing logic.
+- **BouDerya MohaMed (Backend Lead):** Architect of the secure REST API, database schemas, and media processing logic.
 
 ---
 
