@@ -172,11 +172,13 @@ const ManageUsers = () => {
             </Table>
           </div>
 
-          <Pagination
-            handlePageChange={handlePageChange}
-            totalPages={getAllUsersTotalPages}
-            pageNumber={pageNumber}
-          />
+          {getAllUsersRecords.length > 0 && (
+            <Pagination
+              handlePageChange={handlePageChange}
+              totalPages={getAllUsersTotalPages}
+              pageNumber={pageNumber}
+            />
+          )}
         </div>
       </Loading>
     </>

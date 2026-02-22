@@ -165,11 +165,13 @@ const ManageComments = () => {
             </Table>
           </div>
 
-          <Pagination
-            totalPages={getAllCommentsTotalPages}
-            handlePageChange={handlePageChange}
-            pageNumber={pageNumber}
-          />
+          {getAllCommentsRecords.length > 0 && (
+            <Pagination
+              totalPages={getAllCommentsTotalPages}
+              handlePageChange={handlePageChange}
+              pageNumber={pageNumber}
+            />
+          )}
         </div>
       </Loading>
     </>

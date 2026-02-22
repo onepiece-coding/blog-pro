@@ -103,23 +103,25 @@ const PostsList = () => {
                 />
               </Loading>
             </Card.Body>
-            <Card.Footer>
-              {locationState ? (
-                <Link
-                  className="text-decoration-none"
-                  aria-label="Get All Posts"
-                  to="/posts/posts-list"
-                >
-                  Go back to all posts
-                </Link>
-              ) : (
-                <Pagination
-                  handlePageChange={handlePageChange}
-                  totalPages={getPostsTotalPages}
-                  pageNumber={pageNumber}
-                />
-              )}
-            </Card.Footer>
+            {(locationState || getPostsRecords.length > 0) && (
+              <Card.Footer>
+                {locationState ? (
+                  <Link
+                    className="text-decoration-none"
+                    aria-label="Get All Posts"
+                    to="/posts/posts-list"
+                  >
+                    Go back to all posts
+                  </Link>
+                ) : (
+                  <Pagination
+                    handlePageChange={handlePageChange}
+                    totalPages={getPostsTotalPages}
+                    pageNumber={pageNumber}
+                  />
+                )}
+              </Card.Footer>
+            )}
           </Card>
         </Container>
       </section>

@@ -171,11 +171,13 @@ const ManagePosts = () => {
             </Table>
           </div>
 
-          <Pagination
-            handlePageChange={handlePageChange}
-            totalPages={getPostsTotalPages}
-            pageNumber={pageNumber}
-          />
+          {getPostsRecords.length > 0 && (
+            <Pagination
+              handlePageChange={handlePageChange}
+              totalPages={getPostsTotalPages}
+              pageNumber={pageNumber}
+            />
+          )}
         </div>
       </Loading>
     </>

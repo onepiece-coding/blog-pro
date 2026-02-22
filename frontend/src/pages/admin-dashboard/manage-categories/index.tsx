@@ -154,11 +154,13 @@ const ManageCategories = () => {
             </Table>
           </div>
 
-          <Pagination
-            totalPages={getAllCategoriesTotalPages}
-            handlePageChange={handlePageChange}
-            pageNumber={pageNumber}
-          />
+          {getAllCategoriesRecords.length > 0 && (
+            <Pagination
+              totalPages={getAllCategoriesTotalPages}
+              handlePageChange={handlePageChange}
+              pageNumber={pageNumber}
+            />
+          )}
         </div>
       </Loading>
     </>
