@@ -46,8 +46,6 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 - **BouDerya MohaMed (Backend Lead):** Architect of the secure REST API, database schemas, and media processing logic.
 
----
-
 ## 👥 Contact
 
 ✅ Developed with ♥ by **OnePiece Coding** | Self Taught Software Engineers | BouDerya MohaMed | Lahcen Alhiane
