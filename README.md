@@ -10,6 +10,8 @@ This project isn't just a dashboard; it’s a complete ecosystem including a pub
 This platform was built to solve the "heavy dependency" problem in modern web apps. 
 We focused on native browser capabilities and custom state logic to ensure the fastest possible Time-to-Interactive (TTI).
 
+[Live Demo](https://op-blog-mo4u.onrender.com/)
+
 ### 🛠 Tech Stack
 
 - **Frontend (Lahcen Alhiane):** React, Redux Toolkit, TypeScript, Bootstrap, CSS Modules.
