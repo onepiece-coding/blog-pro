@@ -7,6 +7,7 @@ import { randomBytes } from 'crypto';
 import VerificationToken from '../models/VerificationToken.js';
 import { sendEmail } from '../utils/sendEmail.js';
 import { env } from '../env.js';
+import logger from '../utils/logger.js';
 
 /**----------------------------------
  * @desc   Register New User
@@ -61,7 +62,12 @@ export const registerUserCtrl = asyncHandler(
       subject: 'Verify Your Email',
       html: htmlTemplate,
     };
-    await sendEmail(emailPayload);
+
+    // await sendEmail(emailPayload);
+
+    sendEmail(emailPayload).catch((err: any) =>
+      logger.error('Background email send failed', err),
+    );
 
     // Response
     res.status(201).json({
@@ -114,13 +120,10 @@ export const loginUserCtrl = asyncHandler(
         subject: 'Verify Your Email',
         html: htmlTemplate,
       };
+
       // await sendEmail(emailPayload);
 
-      sendEmail({
-        to: user.email,
-        subject: 'Verify Your Email',
-        html: htmlTemplate,
-      }).catch((err: any) =>
+      sendEmail(emailPayload).catch((err: any) =>
         console.error('Background email send failed', err),
       );
 
