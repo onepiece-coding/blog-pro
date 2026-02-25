@@ -1,4 +1,8 @@
-import nodemailer, { Transporter, SendMailOptions, SentMessageInfo } from 'nodemailer';
+import nodemailer, {
+  Transporter,
+  SendMailOptions,
+  SentMessageInfo,
+} from 'nodemailer';
 import { env } from '../env.js';
 import logger from './logger.js';
 
@@ -37,6 +41,9 @@ async function getTransporter(): Promise<Transporter> {
 
     const tx = nodemailer.createTransport({
       service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: env.APP_EMAIL_ADDRESS,
         pass: process.env.APP_EMAIL_PASSWORD,
