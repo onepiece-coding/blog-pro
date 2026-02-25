@@ -115,15 +115,19 @@ describe('E2E — Admin info aggregate correctness (all created via HTTP)', () =
     cloudinaryMock.__uploadStreamSpy.mockClear();
 
     const createdPosts: any[] = [];
+
+    // fetch categories once (controller returns { categories, totalPages })
+    const catsRes = await adminAgent.get('/api/v1/categories').expect(200);
+    const firstCategoryId = catsRes.body?.categories?.[0]?._id ?? null;
+
     for (let i = 0; i < toVerifyCount; i++) {
       const ua = usersInfo[i].agent;
-      (await adminAgent.get('/api/v1/categories').expect(200)).body.users?.[0]?._id ?? null;
       // create a simple post with image attached
       const postRes = await ua
         .post('/api/v1/posts')
         .field('title', `post-${i}-${Date.now()}`)
         .field('description', `some long description for post ${i}`)
-        .field('categoryId', categoryTitles[0] ? ( (await adminAgent.get('/api/v1/categories').expect(200)).body.users[0]._id ) : '') // fetch first category id
+        .field('categoryId', categoryTitles[0] ? String(firstCategoryId ?? '') : '')
         .attach('image', createPngBuffer(), { filename: `img-${i}.png`, contentType: 'image/png' } as any)
         .expect(201);
 

@@ -22,13 +22,30 @@ describe('src/app.ts', () => {
         __esModule: true,
         env: fakeEnv,
       })),
-      jest.unstable_mockModule('helmet', () => ({
-        __esModule: true,
-        default: () => (req: any, _res: any, next: any) => {
-          req._helmet = true;
-          next();
-        },
-      })),
+      jest.unstable_mockModule('helmet', () => {
+        // create a function that acts like the real helmet() middleware
+        function helmetMock(_opts: any) {
+          return (req: { _helmet: boolean; }, _res: any, next: () => void) => {
+            req._helmet = true;
+            next();
+          };
+        }
+
+        // attach the contentSecurityPolicy helper onto the function
+        helmetMock.contentSecurityPolicy = {
+          getDefaultDirectives: () => ({
+            // return a minimal sensible set; app will merge with this
+            "default-src": ["'self'"],
+            "script-src": ["'self'"],
+            "style-src": ["'self'"],
+          }),
+        };
+
+        return {
+          __esModule: true,
+          default: helmetMock,
+        };
+      }),
       jest.unstable_mockModule('hpp', () => ({
         __esModule: true,
         default: () => (_req: any, _res: any, next: any) => next(),

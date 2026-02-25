@@ -1,6 +1,14 @@
 import { jest } from '@jest/globals';
 import httpMocks from 'node-mocks-http';
 
+function makeFindResult(docs: any[]) {
+  return {
+    sort: jest.fn().mockReturnThis(),
+    skip: jest.fn().mockReturnThis(),
+    limit: (jest.fn() as any).mockResolvedValue(docs),
+  };
+}
+
 describe('categoriesController', () => {
   beforeEach(() => {
     jest.resetModules();
@@ -68,13 +76,11 @@ describe('categoriesController', () => {
     expect(data).toEqual(created);
   });
 
-  test('getAllCategoriesCtrl -> no search -> returns paginated users and totalPages', async () => {
+  test('getAllCategoriesCtrl -> no search -> returns paginated categories and totalPages', async () => {
     const fakeDocs = Array.from({ length: 4 }, (_, i) => ({ title: `cat${i}` }));
-    const findResult = {
-      skip: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-      sort: (jest.fn() as any).mockResolvedValue(fakeDocs),
-    };
+
+    // chainable find result
+    const findResult = makeFindResult(fakeDocs);
 
     const countDocumentsMock = (jest.fn() as any).mockResolvedValue(25);
     const findMock = jest.fn().mockReturnValue(findResult);
@@ -105,22 +111,18 @@ describe('categoriesController', () => {
     expect(countDocumentsMock).toHaveBeenCalledWith({});
     expect(findMock).toHaveBeenCalledWith({});
     expect(findResult.skip).toHaveBeenCalledWith(0);
-    expect(findResult.limit).toHaveBeenCalledWith(10);
+    expect(findResult.limit).toHaveBeenCalledWith(5);
 
     expect(res.statusCode).toBe(200);
     const data = res._getJSONData();
-    expect(data).toHaveProperty('users');
-    expect(data.users).toHaveLength(fakeDocs.length);
-    expect(data).toHaveProperty('totalPages', Math.ceil(25 / 10));
+    expect(data).toHaveProperty('categories');
+    expect(data.categories).toHaveLength(fakeDocs.length);
+    expect(data).toHaveProperty('totalPages', Math.ceil(25 / 5));
   });
 
   test('getAllCategoriesCtrl -> with search and pageNumber -> applies filter and skip', async () => {
     const fakeDocs = [{ title: 'foo' }];
-    const findResult = {
-      skip: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-      sort: (jest.fn() as any).mockResolvedValue(fakeDocs),
-    };
+    const findResult = makeFindResult(fakeDocs);
 
     const countDocumentsMock = (jest.fn() as any).mockResolvedValue(7);
     const findMock = jest.fn().mockReturnValue(findResult);
@@ -150,12 +152,12 @@ describe('categoriesController', () => {
     const expectedFilter = { title: { $regex: 'foo', $options: 'i' } };
     expect(countDocumentsMock).toHaveBeenCalledWith(expectedFilter);
     expect(findMock).toHaveBeenCalledWith(expectedFilter);
-    expect(findResult.skip).toHaveBeenCalledWith(10);
-    expect(findResult.limit).toHaveBeenCalledWith(10);
+    expect(findResult.skip).toHaveBeenCalledWith(5); // (pageNumber-1) * 5
+    expect(findResult.limit).toHaveBeenCalledWith(5);
     expect(res.statusCode).toBe(200);
     const data = res._getJSONData();
-    expect(data.totalPages).toBe(Math.ceil(7 / 10));
-    expect(data.users).toEqual(fakeDocs);
+    expect(data.totalPages).toBe(Math.ceil(7 / 5));
+    expect(data.categories).toEqual(fakeDocs);
   });
 
   test('deleteCategoryCtrl -> category not found -> next called with 404', async () => {

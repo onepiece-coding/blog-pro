@@ -68,7 +68,6 @@ describe('Search & pagination boundaries — posts', () => {
     expect(Array.isArray(r4.body.posts)).toBe(true);
   });
 });
-
 describe('Search & pagination boundaries — categories', () => {
   test('Empty search returns paginated categories and correct totalPages', async () => {
     const TOTAL = 12;
@@ -76,24 +75,32 @@ describe('Search & pagination boundaries — categories', () => {
       await categoryFactory({ title: `cat-${i}` });
     }
 
-    const res = await client.get('/api/v1/categories').query({ search: '', pageNumber: '1' }).expect(200);
+    const res = await client
+      .get('/api/v1/categories')
+      .query({ search: '', pageNumber: '1' })
+      .expect(200);
+
     expect(res.body).toBeDefined();
-    expect(Array.isArray(res.body.users)).toBe(true);
-    expect(res.body.users.length).toBeGreaterThan(0);
-    expect(res.body.users.length).toBeLessThanOrEqual(10);
-    expect(res.body.totalPages).toBe(Math.ceil(TOTAL / 10));
+    expect(Array.isArray(res.body.categories)).toBe(true);
+    expect(res.body.categories.length).toBeGreaterThan(0);
+    expect(res.body.categories.length).toBeLessThanOrEqual(5);
+    expect(res.body.totalPages).toBe(Math.ceil(TOTAL / 5));
   });
 
-  test('pageNumber beyond last returns empty array and correct totalPages for categories', async () => {
+  test('pageNumber beyond last returns empty categories array and correct totalPages', async () => {
     const TOTAL = 3;
     for (let i = 0; i < TOTAL; i++) {
       await categoryFactory({ title: `small-${i}` });
     }
 
-    const res = await client.get('/api/v1/categories').query({ pageNumber: '50' }).expect(200);
-    expect(Array.isArray(res.body.users)).toBe(true);
-    expect(res.body.users.length).toBe(0);
-    expect(res.body.totalPages).toBe(Math.ceil(TOTAL / 10));
+    const res = await client
+      .get('/api/v1/categories')
+      .query({ pageNumber: '50' })
+      .expect(200);
+
+    expect(Array.isArray(res.body.categories)).toBe(true);
+    expect(res.body.categories.length).toBe(0);
+    expect(res.body.totalPages).toBe(Math.ceil(TOTAL / 5));
   });
 
   test('search with special chars / emojis / very long strings on categories returns 200', async () => {
@@ -101,14 +108,23 @@ describe('Search & pagination boundaries — categories', () => {
     await categoryFactory({ title: 'weird / chars * (test)' });
     await categoryFactory({ title: '<b>bold-cat</b>' });
 
-    const r1 = await client.get('/api/v1/categories').query({ search: '😀', pageNumber: '1' }).expect(200);
-    expect(Array.isArray(r1.body.users)).toBe(true);
+    const r1 = await client
+      .get('/api/v1/categories')
+      .query({ search: '😀', pageNumber: '1' })
+      .expect(200);
+    expect(Array.isArray(r1.body.categories)).toBe(true);
 
-    const r2 = await client.get('/api/v1/categories').query({ search: '/ chars * (test)', pageNumber: '1' }).expect(200);
-    expect(Array.isArray(r2.body.users)).toBe(true);
+    const r2 = await client
+      .get('/api/v1/categories')
+      .query({ search: '/ chars * (test)', pageNumber: '1' })
+      .expect(200);
+    expect(Array.isArray(r2.body.categories)).toBe(true);
 
     const big = 'y'.repeat(8000);
-    const r3 = await client.get('/api/v1/categories').query({ search: big, pageNumber: '1' }).expect(200);
-    expect(Array.isArray(r3.body.users)).toBe(true);
+    const r3 = await client
+      .get('/api/v1/categories')
+      .query({ search: big, pageNumber: '1' })
+      .expect(200);
+    expect(Array.isArray(r3.body.categories)).toBe(true);
   });
 });

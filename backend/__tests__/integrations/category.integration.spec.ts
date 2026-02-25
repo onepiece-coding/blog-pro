@@ -69,8 +69,10 @@ describe('Categories integration', () => {
 
     const resSearch = await client.get('/api/v1/categories').query({ search: 'findme', pageNumber: '1' }).expect(200);
     expect(resSearch.body).toBeDefined();
-    expect(Array.isArray(resSearch.body.users) || Array.isArray(resSearch.body)).toBeTruthy();
-    const results = resSearch.body.users ?? resSearch.body;
+
+    // controller returns { categories, totalPages }
+    expect(Array.isArray(resSearch.body.categories)).toBeTruthy();
+    const results = resSearch.body.categories ?? resSearch.body;
     expect(results.length).toBeGreaterThan(0);
     expect(results[0].title.toLowerCase()).toContain('findme');
 
@@ -119,7 +121,7 @@ describe('Categories integration', () => {
 
     const res = await client.get('/api/v1/categories').expect(200);
     expect(res.body).toBeDefined();
-    expect(Array.isArray(res.body.users)).toBe(true);
+    expect(Array.isArray(res.body.categories)).toBe(true);
     expect(res.body.totalPages).toBeDefined();
   });
 

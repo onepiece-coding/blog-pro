@@ -87,10 +87,16 @@ describe('Comments integration', () => {
     const adminHeader = { Authorization: `Bearer ${createJwtForUser(admin as any)}` };
 
     const res = await client.get('/api/v1/comments').set(adminHeader).expect(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThanOrEqual(2);
 
-    const first = res.body[0];
+    // controller returns { comments, totalPages }
+    expect(res.body).toBeDefined();
+    expect(res.body).toHaveProperty('comments');
+    expect(Array.isArray(res.body.comments)).toBe(true);
+    expect(res.body.comments.length).toBeGreaterThanOrEqual(2);
+    expect(res.body).toHaveProperty('totalPages');
+
+    const first = res.body.comments[0];
+    expect(first).toBeDefined();
     expect(first.user).toBeDefined();
     expect(first.user.username).toBeDefined();
   });

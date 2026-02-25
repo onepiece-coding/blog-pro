@@ -50,6 +50,17 @@ describe('commentsController', () => {
     const fakeProfile = { username: 'alice' };
     const createdComment = { _id: 'c1', text: 'hello', username: 'alice' };
 
+    // savedComment should have populate() which resolves to the final comment
+    const savedComment = {
+      ...createdComment,
+      populate: (jest.fn() as any).mockResolvedValue(createdComment),
+    };
+
+    // mock Comment as a constructor that returns { save: async () => savedComment }
+    const CommentMock = (jest.fn() as any).mockImplementation(() => ({
+      save: (jest.fn() as any).mockResolvedValue(savedComment),
+    }));
+
     await Promise.all([
       jest.unstable_mockModule('../../src/models/Post.js', () => ({
         __esModule: true,
@@ -61,7 +72,7 @@ describe('commentsController', () => {
       })),
       jest.unstable_mockModule('../../src/models/Comment.js', () => ({
         __esModule: true,
-        default: { create: (jest.fn() as any).mockResolvedValue(createdComment) },
+        default: CommentMock,
       }))
     ]);
 
@@ -90,15 +101,21 @@ describe('commentsController', () => {
   test('getAllCommentsCtrl -> returns comments with populated "user"', async () => {
     const populatedComments = [{ _id: 'c1', text: 'x', user: { username: 'bob' } }];
 
-    const findReturn = {
+    // chainable query object: sort().skip().limit().populate() -> resolves to populatedComments
+    const queryChain = {
+      sort: (jest.fn() as any).mockReturnThis(),
+      skip: (jest.fn() as any).mockReturnThis(),
+      limit: (jest.fn() as any).mockReturnThis(),
       populate: (jest.fn() as any).mockResolvedValue(populatedComments),
     };
-    const findMock = jest.fn().mockReturnValue(findReturn);
+    const findMock = jest.fn().mockReturnValue(queryChain);
+
+    const countDocumentsMock = (jest.fn() as any).mockResolvedValue(populatedComments.length);
 
     await Promise.all([
       jest.unstable_mockModule('../../src/models/Comment.js', () => ({
         __esModule: true,
-        default: { find: findMock },
+        default: { find: findMock, countDocuments: countDocumentsMock },
       }))
     ]);
 
@@ -113,11 +130,14 @@ describe('commentsController', () => {
 
     expect(next).not.toHaveBeenCalled();
     expect(findMock).toHaveBeenCalledWith();
-    expect(findReturn.populate).toHaveBeenCalledWith('user');
+    expect(queryChain.populate).toHaveBeenCalledWith('user');
 
     expect(res.statusCode).toBe(200);
     const data = res._getJSONData();
-    expect(data).toEqual(populatedComments);
+    expect(data).toEqual({
+      comments: populatedComments,
+      totalPages: Math.ceil(populatedComments.length / 5),
+    });
   });
 
   /*********************************************************
@@ -309,7 +329,11 @@ describe('commentsController', () => {
     const found = { _id: 'c5', user: { toString: () => 'owner' } };
     const updated = { _id: 'c5', text: 'updated' };
     const findByIdMock = (jest.fn() as any).mockResolvedValue(found);
-    const findByIdAndUpdateMock = (jest.fn() as any).mockResolvedValue(updated);
+
+    // findByIdAndUpdate should return something that has .populate(...)
+    const findByIdAndUpdateMock = (jest.fn() as any).mockReturnValue({
+      populate: (jest.fn() as any).mockResolvedValue(updated),
+    });
 
     await Promise.all([
       jest.unstable_mockModule('../../src/models/Comment.js', () => ({
