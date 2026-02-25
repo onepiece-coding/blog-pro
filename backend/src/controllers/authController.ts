@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { randomBytes } from 'crypto';
 import VerificationToken from '../models/VerificationToken.js';
-import sendEmail from '../utils/sendEmail.js';
+import { sendEmail } from '../utils/sendEmail.js';
 import { env } from '../env.js';
 
 /**----------------------------------
@@ -114,7 +114,15 @@ export const loginUserCtrl = asyncHandler(
         subject: 'Verify Your Email',
         html: htmlTemplate,
       };
-      await sendEmail(emailPayload);
+      // await sendEmail(emailPayload);
+
+      sendEmail({
+        to: user.email,
+        subject: 'Verify Your Email',
+        html: htmlTemplate,
+      }).catch((err: any) =>
+        console.error('Background email send failed', err),
+      );
 
       res.status(400).json({
         message:
