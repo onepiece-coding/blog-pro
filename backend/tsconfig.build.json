@@ -7,13 +7,5 @@
     "sourceMap": true
   },
   "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test",
-    "tests",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "jest.config.ts"
-  ]
+  "exclude": ["node_modules", "dist", "test", "tests"]
 }

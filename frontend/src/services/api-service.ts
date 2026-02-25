@@ -9,7 +9,7 @@ import { TokenService } from "./auth-service";
 const BASE_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:8000/api/v1"
-    : "/api/v1";
+    : "https://op-blog-mo4u.onrender.com/api/v1";
 
 const api = axios.create({
   baseURL: BASE_URL,
