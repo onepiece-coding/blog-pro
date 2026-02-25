@@ -4,9 +4,8 @@ import createError from 'http-errors';
 import User from '../models/User.js';
 import { randomBytes } from 'crypto';
 import VerificationToken from '../models/VerificationToken.js';
-import { sendEmail } from '../utils/sendEmail.js';
+import sendEmail from '../utils/sendEmail.js';
 import { env } from '../env.js';
-import logger from '../utils/logger.js';
 
 /**----------------------------------
  * @desc   Send Reset Password Link
@@ -43,12 +42,7 @@ export const sendResetPasswordLinkCtrl = asyncHandler(
       subject: 'Reset Password',
       html: htmlTemplate,
     };
-
-    // await sendEmail(emailPayload);
-
-    sendEmail(emailPayload).catch((err: any) =>
-      logger.error('Background email send failed', err),
-    );
+    await sendEmail(emailPayload);
 
     res.status(200).json({
       message:
