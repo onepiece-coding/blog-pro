@@ -185,6 +185,7 @@ const PostDetails = () => {
                   aria-label="Delete single post"
                   animation="border"
                   role="status"
+                  size="sm"
                 />{" "}
                 Removing post...
               </>
