@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import User from '../models/User.js';
 import { randomBytes } from 'crypto';
 import VerificationToken from '../models/VerificationToken.js';
-import sendEmail from '../utils/sendEmail.js';
+import { sendEmail } from '../utils/sendEmail.js';
 import { env } from '../env.js';
 
 /**----------------------------------
