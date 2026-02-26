@@ -40,9 +40,7 @@ async function getTransporter(): Promise<Transporter> {
     }
 
     const tx = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
+      service: 'gmail',
       auth: {
         user: env.APP_EMAIL_ADDRESS,
         pass: process.env.APP_EMAIL_PASSWORD,
