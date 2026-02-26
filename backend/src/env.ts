@@ -25,6 +25,9 @@ const runtime = z.object({
   // Email
   APP_EMAIL_ADDRESS: z.email().optional(),
   APP_EMAIL_PASSWORD: z.string().optional(),
+  FROM_EMAIL: z.email().optional(),
+  BREVO_API_KEY: z.string().optional(),
+  EMAIL_TIMEOUT_MS: z.string().optional(),
 });
 
 const envSchema = base.extend(runtime.shape).refine(
