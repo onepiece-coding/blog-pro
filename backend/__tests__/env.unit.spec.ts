@@ -20,6 +20,9 @@ describe('env.ts schema & behavior', () => {
     'CLOUDINARY_API_SECRET',
     'APP_EMAIL_ADDRESS',
     'APP_EMAIL_PASSWORD',
+    "BREVO_API_KEY",
+    "FROM_EMAIL",
+    "EMAIL_TIMEOUT_MS",
   ];
 
   beforeEach(() => {
@@ -72,6 +75,9 @@ describe('env.ts schema & behavior', () => {
     process.env.APP_EMAIL_PASSWORD = 'emailpass';
     process.env.COOKIE_SECRET = 'cookie-secret';
     process.env.CLIENT_DOMAIN = 'https://example.com';
+    process.env.BREVO_API_KEY = 'brevokey';
+    process.env.FROM_EMAIL = 'me@example.com';
+    process.env.EMAIL_TIMEOUT_MS = '10000';
 
     await Promise.all([
       jest.unstable_mockModule('../src/utils/logger', () => ({
@@ -91,6 +97,9 @@ describe('env.ts schema & behavior', () => {
     expect(env.APP_EMAIL_ADDRESS).toBe('me@example.com');
     expect(env.COOKIE_SECRET).toBe('cookie-secret');
     expect(env.CLIENT_DOMAIN).toBe('https://example.com');
+    expect(env.BREVO_API_KEY).toBe('brevokey');
+    expect(env.FROM_EMAIL).toBe('me@example.com');
+    expect(env.EMAIL_TIMEOUT_MS).toBe('10000');
     expect(loggerMock.error).not.toHaveBeenCalled();
   });
 
