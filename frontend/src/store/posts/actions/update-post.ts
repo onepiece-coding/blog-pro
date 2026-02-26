@@ -13,8 +13,6 @@ type TBody = Partial<Record<string, string>>;
 const updatePost = createAsyncThunk(
   "posts/updatePost",
   async ({ postId, body }: { postId: string; body: TBody }, thunk) => {
-    console.log(postId, body);
-
     const { fulfillWithValue, rejectWithValue } = thunk;
 
     try {

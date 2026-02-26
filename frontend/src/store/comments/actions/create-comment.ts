@@ -14,7 +14,6 @@ const createComment = createAsyncThunk(
     const { fulfillWithValue, rejectWithValue } = thunk;
     try {
       const response = await api.post<IComment>("/comments", { postId, text });
-      console.log(response.data);
 
       return fulfillWithValue(response.data);
     } catch (error) {

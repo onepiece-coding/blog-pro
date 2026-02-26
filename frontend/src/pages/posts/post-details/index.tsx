@@ -79,8 +79,6 @@ const PostDetails = () => {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const selectedFile = e.target.files?.[0];
 
-    console.log(selectedFile);
-
     if (selectedFile) {
       setImage(selectedFile);
       const imageUrl = URL.createObjectURL(selectedFile);

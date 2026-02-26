@@ -20,7 +20,6 @@ const updatePostImage = createAsyncThunk(
         `/posts/update-image/${postId}`,
         formData,
       );
-      console.log(response.data);
 
       return fulfillWithValue(response.data);
     } catch (error) {
