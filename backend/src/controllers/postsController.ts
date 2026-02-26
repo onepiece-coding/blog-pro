@@ -261,7 +261,7 @@ export const updatePostImageCtrl = asyncHandler(
       req.params.id,
       { $set: { image } },
       { new: true },
-    );
+    ).populate('user');
     res.status(200).json(updatedPost);
   },
 );

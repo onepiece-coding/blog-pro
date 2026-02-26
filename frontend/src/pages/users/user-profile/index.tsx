@@ -273,12 +273,15 @@ const UserProfile = () => {
                       </div>
                       <ul className={userInfoList}>
                         <li>Username: {getUserProfileUser?.username}</li>
-                        <li>Email: {getUserProfileUser?.email}</li>
+                        {currentUser?._id === getUserProfileUser?._id ||
+                        currentUser?.isAdmin ? (
+                          <li>Email: {getUserProfileUser?.email}</li>
+                        ) : null}
                         {getUserProfileUser?.bio && (
                           <li>Bio: {getUserProfileUser.bio}</li>
                         )}
                         <li>
-                          Join Us:{" "}
+                          Joined Us:{" "}
                           {formatTimeAgo(getUserProfileUser?.createdAt || "")}
                         </li>
                       </ul>
