@@ -160,6 +160,15 @@ const PostDetails = () => {
     };
   }, [dispatch, postId]);
 
+  useEffect(() => {
+    // Cleanup the memory when the component unmounts or preview changes
+    return () => {
+      if (preview && preview.startsWith("blob:")) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
   return (
     <>
       <title>OP-Blog - Post Details</title>
