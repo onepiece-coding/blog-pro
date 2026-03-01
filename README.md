@@ -14,7 +14,7 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 - **Frontend (Lahcen Alhiane):** React, Redux Toolkit, TypeScript, Bootstrap, CSS Modules.
 
-- **Backend (BouDerya MohaMed):** Node.js, Express, MongoDB, Cloudinary (for media), JWT.
+- **Backend (Bouderya Mohamed):** Node.js, Express, MongoDB, Typescript, Jest, Cloudinary (for media), JWT.
 
 ## ✨ Key Features
 
@@ -44,7 +44,7 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 - **Lahcen Alhiane (Frontend Lead):** Focused on UX fluidity, performance-driven state management, and responsive architecture.
 
-- **BouDerya MohaMed (Backend Lead):** Architect of the secure REST API, database schemas, and media processing logic.
+- **Bouderya Mohamed (Backend Lead):** Architect of the secure REST API, database schemas, and media processing logic.
 
 ## 👥 Contact
 
@@ -53,6 +53,7 @@ We focused on native browser capabilities and custom state logic to ensure the f
 👉 GitHub: [https://github.com/onepiece-coding](https://github.com/onepiece-coding)
 
 👉 LinkedIn: [https://www.linkedin.com/in/lahcen-alhiane-61217239a/](https://www.linkedin.com/in/lahcen-alhiane-61217239a/)
+👉 LinkedIn: [https://www.linkedin.com/in/lahcen-alhiane-61217239a/](https://www.linkedin.com/in/mohamed-bouderya-0270142a2/)
 
 ---
 
