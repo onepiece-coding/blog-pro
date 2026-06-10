@@ -7,9 +7,6 @@ import cookieParser from 'cookie-parser';
 import { errorHandler, notFound } from './middlewares/error.js';
 import { env } from './env.js';
 import rootRouter from './routes/index.js';
-import path from 'path';
-
-const __dirname = path.resolve(); // backend path
 
 // Initialize app
 const app: Application = express();
@@ -51,17 +48,16 @@ app.use(
 );
 app.use(hpp());
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use(
-    cors({
-      origin: allowedOrigin,
-      methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
-      credentials: true,
-      exposedHeaders: ['Content-Disposition'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    }),
-  );
-}
+app.use(
+  cors({
+    origin: allowedOrigin,
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
+    credentials: true,
+    exposedHeaders: ['Content-Disposition'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  }),
+);
+
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -75,15 +71,6 @@ app.use(cookieParser(env.COOKIE_SECRET ?? undefined));
 
 // Routes
 app.use('/api/v1', rootRouter);
-
-if (process.env.NODE_ENV === 'production') {
-  // Express serve static files (html, css, js, ...)
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  app.get('*path', (_req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend/dist/index.html'));
-  });
-}
 
 // 404 Handler
 app.use(notFound);
