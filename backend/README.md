@@ -54,4 +54,4 @@ npm run dev
 ## Contact
 
 Email: mohamed.bouderya@gmail.com
-Project: https://github.com/onepiece-coding/mern-stack-and-next.js-blog-pro
+LinkedIn: (https://www.linkedin.com/in/mohamed-bouderya-0270142a2)

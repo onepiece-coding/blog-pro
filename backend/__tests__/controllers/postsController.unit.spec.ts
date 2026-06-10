@@ -578,7 +578,7 @@ describe('postsController', () => {
         __esModule: true,
         default: {
           findById: (jest.fn() as any).mockResolvedValue(postWithOld),
-          findByIdAndUpdate: (jest.fn() as any).mockResolvedValue(updatedPost),
+          findByIdAndUpdate: (jest.fn() as any).mockReturnValue(makeQuery(updatedPost)),
         },
       })),
       jest.unstable_mockModule('../../src/utils/cloudinary.js', () => ({
