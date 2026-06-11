@@ -46,6 +46,19 @@ We focused on native browser capabilities and custom state logic to ensure the f
 
 - **Bouderya Mohamed (Backend Lead):** Architect of the secure REST API, database schemas, and media processing logic.
 
+---
+
+## ✨ Live Demo
+
+🚀 **[https://op-blog-frontend.vercel.app/](https://op-blog-frontend.vercel.app/)**
+
+**Test credentials**
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@email.com | Pass@1234 |
+| User | user@email.com | Pass@1234 |
+
 ## 👥 Contact
 
 ✅ Developed with ♥ by **OnePiece Coding** | Self Taught Software Engineers | BouDerya MohaMed | Lahcen Alhiane
